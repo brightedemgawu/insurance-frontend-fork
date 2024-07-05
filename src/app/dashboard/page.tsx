@@ -2,7 +2,9 @@ import {signOut} from "@/auth";
 
 export default function Page() {
     return (
-        <div>
+        <div
+            className={"w-full h-[200vh]"}
+        >
             <h1>Dashboard Page</h1>
             <form
                 action={async () => {

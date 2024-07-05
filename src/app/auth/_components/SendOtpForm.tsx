@@ -45,6 +45,7 @@ export default function SendOtpForm() {
             className="w-full flex flex-col gap-[1.5rem] items-center justify-center"
         >
             <FormTextInput<FormFields>
+                className={"md:h-[45px]"}
                 label="Email"
                 required={true}
                 placeholder="Enter your email"

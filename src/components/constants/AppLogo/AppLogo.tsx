@@ -44,15 +44,15 @@ export default function AppLogo({className, iconOnly}: AppLogoProps) {
             />
             {!iconOnly &&
                 <div
-                    className="text-gray-text tracking-wider font-bold text-[15px] flex flex-col  justify-start gap-0 "
+                    className="text-gray-text tracking-wider font-bold text-[13px] flex flex-col  justify-start gap-0 "
                 >
                     <span>
                         SEVEN GROUP
                     </span>
                     <span
-                        className="font-medium mt-[-4px] text-[12px] text-gray-text-caption "
+                        className="font-medium mt-[-4px] text-[10px] italic text-gray-text-caption "
                     >
-                        INSURANCE
+                        INSURAN<span className={"text-primary-text"} >CE</span>
                 </span>
                 </div>
             }

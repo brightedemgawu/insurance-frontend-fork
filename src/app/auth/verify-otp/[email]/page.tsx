@@ -4,7 +4,7 @@ import VerifyOtpCodeForm from "@/app/auth/_components/VerifyOtpCodeForm";
 export default function Page({params}: { params: { email: string } }) {
     return (
         <div
-            className={"md:p-4 md:drop-shadow-2xl md:rounded-md w-[450px]  bg-gray-white"}
+            className={"md:p-8 md:drop-shadow-2xl md:rounded-md w-[450px]  bg-gray-white"}
         >
             <h3
                 className="text-gray-text text-[2rem] font-[700]"

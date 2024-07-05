@@ -20,11 +20,11 @@ export const authSlice = createSlice({
         clearAuthUser: (state: AuthState) => {
             return {...state, authenticatedUser: null};
         },
-        clear: (state: AuthState) => {
+        clearAuthStore: (state: AuthState) => {
             return {authenticatedUser: null}
         }
     }
 })
 
-export const {setAuthUser, clearAuthUser, clear} = authSlice.actions
+export const {setAuthUser, clearAuthUser, clearAuthStore} = authSlice.actions
 export default authSlice.reducer;

@@ -4,7 +4,7 @@ import SendOtpForm from "@/app/auth/_components/SendOtpForm";
 export default function Page() {
     return (
         <div
-            className={" md:px-4  py-8  drop-shadow-none md:drop-shadow-2xl md:rounded-md w-full  md:w-[450px]   bg-gray-white"}
+            className={" md:px-8  py-10  drop-shadow-none md:drop-shadow-2xl md:rounded-md w-full  md:w-[450px]   bg-gray-white"}
         >
             <h3
                 className="text-gray-text text-[2rem] font-[700]"

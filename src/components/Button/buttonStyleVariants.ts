@@ -6,7 +6,7 @@ export const buttonStyleVariants = cva(
         variants: {
             variant: {
                 "default": "bg-primary-surface text-gray-white hover:bg-primary-600",
-                "destructive": "bg-error-surface text-gray-white focus:ring-error-200",
+                "destructive": "bg-error-surface hover:bg-error-600 text-gray-white focus:ring-error-200",
                 "light": "bg-gray-white border-[1px] border-gray-600 hover:bg-gray-100 text-gray-black focus:ring-gray-400",
                 "alternative": "bg-gray-white border-[1px] border-gray-600 text-gray-black  active:text-primary-text hover:border-primary-600  hover:text-primary-text focus:ring-primary-border",
                 "link": "shadow-none text-gray-black hover:text-primary-text",
