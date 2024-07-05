@@ -7,6 +7,7 @@ import {cn} from "@/lib/utils";
 import {dashboardSideBarLinkMainItems, dashboardSideBarLinkSettingItems} from "@/constants/links/dashboard-links";
 import {Separator} from "@/components/ui/separator";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
+import SignOutActionButton from "@/components/Auth/SignOutActionButton";
 
 export default function DashboardNavBarMobileSheet() {
     return (
@@ -45,6 +46,12 @@ export default function DashboardNavBarMobileSheet() {
 
                             <DashboardSideBarLinkMenu links={dashboardSideBarLinkSettingItems} smallBar={false}/>
                         </div>
+                    </div>
+                    <div
+                    className={"w-full px-4 mb-8"}
+                    >
+                        <SignOutActionButton/>
+
                     </div>
                 </div>
             </SheetContent>
