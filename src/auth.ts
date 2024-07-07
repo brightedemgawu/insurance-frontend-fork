@@ -1,9 +1,11 @@
 import NextAuth, {User} from "next-auth";
 import Credentials from "@auth/core/providers/credentials";
 import {object, string, ZodError} from "zod";
+import jwt from "jsonwebtoken";
+import {DecodedRefreshToken} from "@/types/authentication";
 
 export const credentialSchema = object({
-    accessToken: string().min(1),
+    token: string().min(1),
 })
 export const {handlers, signIn, signOut, auth} = NextAuth({
 
@@ -15,15 +17,21 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
     providers: [
         Credentials({
             credentials: {
-                accessToken: {},
+                token: {},
             },
             authorize: async (credentials) => {
                 try {
 
-                    const {accessToken} = await credentialSchema.parseAsync(credentials)
+                    const {token} = await credentialSchema.parseAsync(credentials)
+                    const decodedToken = jwt.decode(token) as DecodedRefreshToken;
                     return {
-                        email: accessToken,
+                        userId: decodedToken.id,
+                        name: decodedToken.name,
+                        email: decodedToken.email,
+                        userType: decodedToken.userType,
+                        accessLevel: decodedToken.accessLevel,
                     } as User;
+
 
                 } catch (error) {
                     if (error instanceof ZodError) {
@@ -34,6 +42,29 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
             },
         }),
     ],
-
-
+    callbacks: {
+        jwt({token, user}) {
+            if (user) {
+                const authenticatedUser: any = user;
+                token.token = authenticatedUser?.token;
+                token.userId = authenticatedUser?.userId;
+                token.name = authenticatedUser?.name;
+                token.email = authenticatedUser?.email;
+                token.userType = authenticatedUser?.userType;
+                token.accessLevel = authenticatedUser?.accessLevel;
+            }
+            return token;
+        },
+        session({session, token}) {
+            const newToken: any = {...token}
+            const newSession: any = {
+                ...session,
+                user: {
+                    ...session.user,
+                    ...newToken,
+                }
+            };
+            return newSession as typeof session;
+        }
+    },
 })

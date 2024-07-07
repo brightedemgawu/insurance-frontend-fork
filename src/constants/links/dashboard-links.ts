@@ -23,3 +23,16 @@ export const dashboardSideBarLinkSettingItems: DashboardSideBarLinkItemType[] = 
         icon: Settings,
     },
 ]
+
+export  type SettingsLayoutLink = {
+    name: string,
+    link: string,
+}
+
+export const SettingsLayoutLinks: SettingsLayoutLink[] = [
+    {
+        name: "Access Level",
+        link: "/dashboard/settings/access-level",
+    },
+
+]

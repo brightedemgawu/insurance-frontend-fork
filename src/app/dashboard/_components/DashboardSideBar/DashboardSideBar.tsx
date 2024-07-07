@@ -10,10 +10,17 @@ import SignOutActionButton from "@/components/Auth/SignOutActionButton";
 import DashboardSideBarLinkMenu from "@/app/dashboard/_components/DashboardSideBar/DashboardSideBarLinkMenu";
 import {dashboardSideBarLinkMainItems, dashboardSideBarLinkSettingItems} from "@/constants/links/dashboard-links";
 import {Separator} from "@/components/ui/separator";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/store";
 
 export default function DashboardSideBar() {
     const [smallBar, setSmallBar] = useState<boolean>(false)
-    const user: { email: string, imageUrl?: string } = {email: "brightedemgawu@gmail.com"};
+    const user = useSelector((state: RootState) => state.auth.authenticatedUser);
+
+    if (!user) {
+        return null
+    }
+
     return (
         <aside
             className={cn(

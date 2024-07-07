@@ -11,7 +11,7 @@ export default function DashboardSideBarLinkItem({link, smallBar}: {
     smallBar: boolean
 }) {
     const pathname = usePathname()
-    const isActive = pathname === link.link;
+    const isActive = link.link === "/dashboard" ? pathname === link.link : pathname.startsWith(link.link);
     return (
         <Link
             href={link.link}

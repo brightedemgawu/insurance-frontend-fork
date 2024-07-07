@@ -1,5 +1,8 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
+import {SuccessfulLoginDto} from "@/services/authentication/dtos/response/SuccessfulLoginDto";
+import jwt from "jsonwebtoken";
+import {AuthenticatedUser, DecodedRefreshToken} from "@/types/authentication";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -28,4 +31,31 @@ export function formatUserEmail(email: string = ""): string {
 
     // Construct the new format
     return `@${truncatedUsername}`;
+}
+
+/**
+ * Capitalizes the first letter of a given string.
+ *
+ * @param {string} str - The string to be capitalized.
+ * @returns {string} The capitalized string.
+ */
+export function capitalizeFirstLetter(str: string): string {
+    str = str.replace("-", " ")
+    if (str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
+export function decodeToken(token: SuccessfulLoginDto): AuthenticatedUser {
+
+    const decodedToken = jwt.decode(token.token) as DecodedRefreshToken;
+
+    return {
+        id: decodedToken.id,
+        name: decodedToken.name,
+        email: decodedToken.email,
+        userType: decodedToken.userType,
+        accessLevel: decodedToken.accessLevel,
+    } as AuthenticatedUser
+
 }

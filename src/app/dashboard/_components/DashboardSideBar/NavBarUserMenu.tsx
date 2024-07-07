@@ -1,10 +1,13 @@
 import UserAvatar from "@/components/Auth/UserAvatar";
 import {Group} from "lucide-react";
+import {getAuthenticatedUser} from "@/actions/getAuthenticatedUser";
+import {capitalizeFirstLetter} from "@/lib/utils";
 
-export default function NavBarUserMenu() {
-    const user: { email: string, name: string, imageUrl?: string } = {
-        email: 'brightedemgawu@gmail.com',
-        name: 'Bright Edem Gawu'
+export default async function NavBarUserMenu() {
+    const user = await getAuthenticatedUser();
+
+    if (!user) {
+        return null
     }
     return (
 
@@ -19,15 +22,18 @@ export default function NavBarUserMenu() {
             >
                 <p
                     className={"text-[12px] text-gray-text font-medium "}
-                >Bright Edem Gawu</p>
+                >{user.name}</p>
                 <p
-                    className={"text-[10px] text-gray-600  "}
-                >HR Manager</p>
+                    className={"text-[10px] text-gray-600  flex items-center gap-1"}
+                >
+                    <Group
+                        size={15}
+                        className={"text-primary-text"}
+                    />
+                    {capitalizeFirstLetter(user.userType)}
+                </p>
             </div>
-            <Group
-                size={20}
-                className={"text-primary-text"}
-            />
+
 
         </div>
 

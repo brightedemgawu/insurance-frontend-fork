@@ -5,14 +5,16 @@ import DashboardNavBar from "@/app/dashboard/_components/DashboardNavBar/Dashboa
 export default function DashboardLayout({children}: { children: ReactNode }) {
     return (
         <div
-            className={"w-full flex gap-[2px] h-screen max-h-screen relative"}
+            className={"w-full  flex gap-[2px] h-screen max-h-screen relative"}
         >
             <DashboardSideBar/>
             <div
                 className={"w-full h-screen max-h-screen overflow-y-scroll custom-scrollbar"}
             >
                 <DashboardNavBar/>
-                {children}
+                <div className="w-full  p-2 md:p-4 h-full">
+                    {children}
+                </div>
             </div>
         </div>
     )

@@ -2,7 +2,7 @@ import {cn, formatUserEmail, formatUserName} from "@/lib/utils";
 import UserAvatar from "@/components/Auth/UserAvatar";
 
 type UserAvatarWithDetailsProps = {
-    user: { email: string, imageUrl?: string }
+    user: { email: string, imageUrl?: string, name?: string }
     avatarClassName?: string,
     nameClassName?: string,
     emailClassName?: string,
@@ -24,7 +24,7 @@ export default function UserAvatarWithDetails({
             />
 
             <div>
-                <p className={cn("text-[1rem] font-medium text-gray-text ", nameClassName)}>{formatUserName("Bright Edem Gawu")}</p>
+                <p className={cn("text-[1rem] font-medium text-gray-text ", nameClassName)}>{formatUserName(user?.name)}</p>
                 <p className={cn("text-[11px] text-gray-text font-normal", emailClassName)}>{formatUserEmail(user?.email)}</p>
             </div>
         </div>

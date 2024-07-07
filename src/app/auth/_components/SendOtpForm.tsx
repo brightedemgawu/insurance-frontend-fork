@@ -7,6 +7,9 @@ import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 import ActionButton from "@/components/Button/ActionButton";
 import FormTextInput from "@/components/Form/Inputs/FormTextInput/FormTextInput";
+import useAuthenticationService from "@/services/authentication/useAuthenticationService";
+import {SendOtpCodeDto} from "@/services/authentication/dtos/request/SendOtpCodeDto";
+import {handleFormApiErrors} from "@/lib/handleApiErrors";
 
 const schema = z.object({
     email: z.string().email({message: 'Please enter a valid email address'}),
@@ -25,17 +28,29 @@ export default function SendOtpForm() {
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
     });
+    const {sendOtpCode} = useAuthenticationService();
 
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
 
-        await new Promise(resolve => setTimeout(resolve, 500));
+        const dto: SendOtpCodeDto = {email: data.email}
+        await sendOtpCode(dto).then((response) => {
+            if (response.success) {
+                toast.success("Email Sent Successfully", {
+                    description: "An email with the OTP code has been sent to your address.",
+                })
+                router.push(`/auth/verify-otp/${data.email}`);
+            } else {
+                toast.error("Login Error", {description: "An unexpected error occurred. Please try again."});
+            }
 
-        toast.success("Email Sent Successfully", {
-            description: "An email with the OTP code has been sent to your address.",
+        }).catch((err) => {
+            handleFormApiErrors<FormFields>(err,
+                setError,
+                Object.keys(schema.shape),
+                "Failed To Send Otp Code",
+            )
         })
-        router.push(`/auth/verify-otp/${data.email}`);
-
     };
 
 

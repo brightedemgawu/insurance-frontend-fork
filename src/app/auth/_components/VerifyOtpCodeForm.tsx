@@ -11,6 +11,10 @@ import Link from "next/link";
 import {cn} from "@/lib/utils";
 import {buttonStyleVariants} from "@/components/Button/buttonStyleVariants";
 import {useSignInUser} from "@/hooks/auth/useSignInUser";
+import useAuthenticationService from "@/services/authentication/useAuthenticationService";
+import {VerifyOtpCodeDto} from "@/services/authentication/dtos/request/VerifyOtpCodeDto";
+import {handleFormApiErrors} from "@/lib/handleApiErrors";
+import {SendOtpCodeDto} from "@/services/authentication/dtos/request/SendOtpCodeDto";
 
 const schema = z.object({
     otpNumber: z.string({message: "Otp Number is required"}).min(6, {message: 'Otp Number is required'}),
@@ -30,23 +34,49 @@ export default function VerifyOtpCodeForm({email}: { email: string }) {
         = useForm<FormFields>({
         resolver: zodResolver(schema),
     });
+    const {sendOtpCode, verifyOtpCode} = useAuthenticationService();
 
     const {signInUser} = useSignInUser()
 
     const onResendOtpCode = async () => {
 
-        await new Promise(resolve => setTimeout(resolve, 500));
-        toast.success("Email Sent Successfully", {
-            description: "An email with the OTP code has been sent to your address.",
+        const dto: SendOtpCodeDto = {email: decodeURIComponent(email)}
+        await sendOtpCode(dto).then((response) => {
+            if (response.success) {
+                toast.success("Email Sent Successfully", {
+                    description: "An email with the OTP code has been sent to your address.",
+                })
+            } else {
+                toast.error("Login Error", {description: "An unexpected error occurred. Please try again."});
+            }
+        }).catch((err) => {
+            handleFormApiErrors<FormFields>(err,
+                setError,
+                Object.keys(schema.shape),
+                "Failed To Send Otp Code",
+            )
         })
     };
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
+        const dto: VerifyOtpCodeDto = {email: decodeURIComponent(email), otp: data.otpNumber}
 
-        await new Promise(resolve => setTimeout(resolve, 500));
-        signInUser({accessToken: email}, "/", true)
+        await verifyOtpCode(dto)
+            .then((response) => {
+                if (response.success) {
+                    signInUser(response.data!, "/", true)
+                } else {
+                    toast.error("Login Error", {description: "An unexpected error occurred. Please try again."});
+                }
+            })
+            .catch((error) => {
+                handleFormApiErrors<FormFields>(error,
+                    setError,
+                    Object.keys(schema.shape),
+                    "OTP Verification Error"
+                )
+            })
     };
-
 
     return (
 
