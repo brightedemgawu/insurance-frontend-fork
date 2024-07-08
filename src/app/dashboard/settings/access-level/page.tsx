@@ -14,7 +14,6 @@ export default async function Page() {
             <main
                 className="w-full rounded-md    p-4 bg-gray-white"
             >
-
                 <div
                     className={"w-full flex justify-between items-center"}
                 >

@@ -77,7 +77,7 @@ export default function AccessLevelTable() {
 
             }
         },
-      
+
     ]
 
     const [tableData, setTableData] = useState<ReadAccessLevelDto[]>([])
@@ -127,7 +127,11 @@ export default function AccessLevelTable() {
             className={"w-full"}
         >
             <AccessLevelTableFilter table={table}/>
-            <CustomTable table={table} columns={usersColumns}/>
+            <div
+            className={"min-h-[40vh]"}
+            >
+                <CustomTable table={table} columns={usersColumns}/>
+            </div>
             <Pagination table={table}/>
         </div>
     )

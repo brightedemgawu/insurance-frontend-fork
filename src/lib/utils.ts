@@ -24,10 +24,9 @@ export function formatUserEmail(email: string = ""): string {
     }
 
     // Split the email into username and domain
-    const [username, domain] = email.split('@');
 
     // Truncate the username to the first 16 characters if it exceeds 17 characters
-    const truncatedUsername = username.length > 17 ? username.slice(0, 16) : username;
+    const truncatedUsername = email.length > 17 ? email.slice(0, 16) : email;
 
     // Construct the new format
     return `@${truncatedUsername}`;

@@ -8,8 +8,8 @@ import FormTextAreaInput from "@/components/Form/Inputs/FormTextInput/FormTextAr
 import {CreateAccessLevelDto} from "@/services/access-levels/dtos/request/CreateAccessLevelDto";
 
 const schema = z.object({
-    name: z.string({message: "name is required"}).min(6, {message: 'Length should be greater than 6 characters'}),
-    description: z.string({message: "description is required"}).min(20, {message: 'Length should be greater than 20 characters'}),
+    name: z.string({message: "name is required"}).min(4, {message: 'Length should be greater than 4 characters'}),
+    description: z.string({message: "description is required"}).min(2, {message: 'Length should be greater than 2 characters'}),
 });
 
 type FormFields = z.infer<typeof schema>;
