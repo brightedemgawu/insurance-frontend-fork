@@ -1,3 +1,5 @@
+import {AccessLevelPermissions} from "@/types/authentication/access-level-permissions";
+
 export type AuthenticatedUser = {
     id: number;
     name: string;
@@ -12,15 +14,6 @@ export enum UserTypes {
     Admin = "admin",
     Employee = "employee",
     Client = "client"
-}
-
-export interface AccessLevelPermissions {
-    view_users: boolean;
-    manage_users: boolean;
-    view_dashboard: boolean;
-    view_access_levels: boolean;
-    view_settings: boolean;
-    manage_access_levels: boolean;
 }
 
 interface AccessLevel {

@@ -17,6 +17,7 @@ import {RootState} from "@/store/store";
 import {UserRoundPlus} from "lucide-react";
 import FormSelectInput from "@/components/Form/Inputs/FormTextInput/FormSelectInput";
 import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
+import {userMeetsRequiredPermissions} from "@/lib/utils";
 
 
 const schema = z.object({
@@ -78,7 +79,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
     };
 
 
-    if (authUser && !(authUser.userType === UserTypes.Admin || authUser.accessLevel?.permissions?.manage_users)) {
+    if (!userMeetsRequiredPermissions(authUser, ["manage_users"])) {
         return null
     }
 

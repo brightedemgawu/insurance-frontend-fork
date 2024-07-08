@@ -2,7 +2,8 @@ import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
 import {SuccessfulLoginDto} from "@/services/authentication/dtos/response/SuccessfulLoginDto";
 import jwt from "jsonwebtoken";
-import {AuthenticatedUser, DecodedRefreshToken} from "@/types/authentication";
+import {AuthenticatedUser, DecodedRefreshToken, UserTypes} from "@/types/authentication";
+import {AccessLevelPermissions} from "@/types/authentication/access-level-permissions";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -79,4 +80,26 @@ export function convertDateToMonthDayYear(dateString: string): string {
 
     // Use the Intl.DateTimeFormat object to format the date
     return new Intl.DateTimeFormat('en-US', options).format(date);
+}
+
+
+/**
+ * Checks if the authenticated user meets the required permissions.
+ * @param user The authenticated user object. If null, access is denied.
+ * @param requiredPermissions Array of permission keys to check against.
+ * @returns True if the user meets all required permissions, false otherwise.
+ */
+export function userMeetsRequiredPermissions(user: AuthenticatedUser | null, requiredPermissions: (keyof AccessLevelPermissions)[]): boolean {
+    // If user is not authenticated, deny access
+    if (!user) {
+        return requiredPermissions.length === 0; // No permissions required, access denied
+    }
+
+    // Admins have access to everything
+    if (user.userType === UserTypes.Admin) {
+        return true;
+    }
+
+    // Check if the user has every required permission
+    return requiredPermissions.every((permission) => user?.accessLevel?.permissions[permission]);
 }

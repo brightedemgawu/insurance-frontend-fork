@@ -1,4 +1,4 @@
-import {cn} from "@/lib/utils";
+import {cn, userMeetsRequiredPermissions} from "@/lib/utils";
 import {DashboardSideBarLinkItemType} from "@/constants/links/dashboard-links";
 import DashboardSideBarLinkItem from "@/app/dashboard/_components/DashboardSideBar/DashboardSideBarLinkItem";
 import {AuthenticatedUser} from "@/types/authentication";
@@ -24,7 +24,7 @@ export default function DashboardSideBarLinkMenu(
 
             {links.map((link, index) => {
 
-                if (link.predicate && !link.predicate(user)) {
+                if (link.permissions && !userMeetsRequiredPermissions(user, link.permissions)) {
                     return null
                 }
 

@@ -1,10 +1,11 @@
 import {LayoutDashboard, LucideIcon, Settings, Users} from "lucide-react";
-import {AuthenticatedUser, UserTypes} from "@/types/authentication";
+import {AccessLevelPermissions} from "@/types/authentication/access-level-permissions";
 
 export type DashboardSideBarLinkItemType = {
     name: string,
     icon?: LucideIcon,
     link: string,
+    permissions?: (keyof AccessLevelPermissions)[],
     predicate?: (param?: any) => boolean,
 }
 
@@ -13,57 +14,29 @@ export const dashboardSideBarLinkMainItems: DashboardSideBarLinkItemType[] = [
         name: "Home",
         link: "/dashboard",
         icon: LayoutDashboard,
-        predicate: (user: AuthenticatedUser | null) => {
-            if (!user) {
-                return true;
-            }
-
-            if (user.userType === UserTypes.Admin) {
-                return true;
-            }
-            return user.accessLevel?.permissions?.view_dashboard;
-        }
+        permissions: ["view_dashboard"]
     },
     {
         name: "Staffs",
         link: "/dashboard/staffs",
         icon: Users,
-        predicate: (user: AuthenticatedUser | null) => {
-
-            if (!user) {
-                return true;
-            }
-
-            if (user.userType === UserTypes.Admin) {
-                return true;
-            }
-            return user.accessLevel?.permissions?.view_users
-        }
+        permissions: ["view_users"]
     },
 ]
 
 export const dashboardSideBarLinkSettingItems: DashboardSideBarLinkItemType[] = [
     {
         name: "Settings",
-        link: "/dashboard/settings",
+        link: "/dashboard/settings/access-level",
         icon: Settings,
-        predicate: (user: AuthenticatedUser | null) => {
-
-            if (!user) {
-                return true;
-            }
-
-            if (user.userType === UserTypes.Admin) {
-                return true;
-            }
-            return user.accessLevel?.permissions?.view_settings
-        }
+        permissions: ["view_settings"]
     },
 ]
 
 export  type SettingsLayoutLink = {
     name: string,
     link: string,
+    permissions?: (keyof AccessLevelPermissions)[],
     predicate?: (param?: any) => boolean,
 }
 
@@ -71,17 +44,6 @@ export const SettingsLayoutLinks: SettingsLayoutLink[] = [
     {
         name: "Access Level",
         link: "/dashboard/settings/access-level",
-        predicate: (user: AuthenticatedUser | null) => {
-
-            if (!user) {
-                return true;
-            }
-
-            if (user.userType === UserTypes.Admin) {
-                return true;
-            }
-            return user.accessLevel?.permissions?.view_access_levels
-        }
+        permissions: ["view_access_levels"]
     },
-
 ]

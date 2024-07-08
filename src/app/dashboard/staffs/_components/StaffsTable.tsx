@@ -158,7 +158,7 @@ export default function StaffsTable() {
 
     return (
         <div
-            className={"w-full"}
+            className={"w-full md:p-6"}
         >
 
             <div

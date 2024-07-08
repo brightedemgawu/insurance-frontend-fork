@@ -2,7 +2,7 @@
 
 import {SettingsLayoutLinks} from "@/constants/links/dashboard-links";
 import Link from "next/link";
-import {cn} from "@/lib/utils";
+import {cn, userMeetsRequiredPermissions} from "@/lib/utils";
 import {usePathname} from "next/navigation";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/store";
@@ -13,10 +13,9 @@ export default function LayoutLink() {
     const user = useSelector((state: RootState) => state.auth.authenticatedUser);
     return (
         SettingsLayoutLinks.map((link, index) => {
-            if (link.predicate && !link.predicate(user)) {
+            if (link.permissions && !userMeetsRequiredPermissions(user, link.permissions)) {
                 return null
             }
-
 
             return (
                 <Link

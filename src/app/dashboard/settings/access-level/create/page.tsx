@@ -20,11 +20,13 @@ export default function Page() {
     const [currentStep, setCurrentStep] = useState(1);
     const [accessLevelDto, setAccessLevelDto] = useState<CreateAccessLevelDto>({});
     const authUser = useSelector((state: RootState) => state.auth.authenticatedUser);
-
     const {createAccessLevel} = useAccessLevelService()
-
     const router = useRouter()
 
+    /**
+     * Handles creation of access level.
+     * @param dto - Data transfer object for access level creation.
+     */
     const onCreateAccessLevel = async (dto: CreateAccessLevelDto) => {
 
         dto.createdBy = authUser!.id;
@@ -48,7 +50,20 @@ export default function Page() {
 
     }
 
+    const onNextTab = (dto: CreateAccessLevelDto) => {
+        setAccessLevelDto(dto)
+        setCurrentStep(currentStep + 1);
+    }
 
+    const onPreviousTab = (dto?: CreateAccessLevelDto) => {
+        dto && setAccessLevelDto(dto)
+        setCurrentStep(currentStep - 1);
+    }
+
+    /**
+     * Renders step content based on current step.
+     * @returns JSX element representing current step content.
+     */
     const renderStepContent = () => {
 
         switch (currentStep) {

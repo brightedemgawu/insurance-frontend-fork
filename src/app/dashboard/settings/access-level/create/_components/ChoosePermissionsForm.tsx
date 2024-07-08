@@ -3,31 +3,18 @@
 import {CreateAccessLevelDto} from "@/services/access-levels/dtos/request/CreateAccessLevelDto";
 import {cn, convertToTitleCase} from "@/lib/utils";
 import {useState} from "react";
-import {AccessLevelPermissions} from "@/types/authentication";
 import {Switch} from "@/components/ui/switch";
 import ActionButton from "@/components/Button/ActionButton";
 import {Separator} from "@/components/ui/separator";
+import {
+    AccessLevelPermissions,
+    DashboardSettingsPermissions,
+    StaffPermissions
+} from "@/types/authentication/access-level-permissions";
 
 
 const PermissionTabs: string[] = ["Settings", "Employees"]
 
-const SettingsPermission = {
-    "view_access_levels": false,
-    "manage_access_levels": false,
-    "view_settings": false
-}
-
-const SettingsList = ["view_settings", "view_access_levels", "manage_access_levels",]
-
-const EmployeePermission = {
-    "view_users": false,
-    "manage_users": false
-}
-
-const EmployeeList = [
-    "view_users",
-    "manage_users"
-]
 
 export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
     dto: CreateAccessLevelDto,
@@ -38,69 +25,36 @@ export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
     const [tab, setTap] = useState<number>(0);
 
     const [permissions, setPermissions] = useState({
-        ...SettingsPermission, ...EmployeePermission, ...dto.permissions,
+        ...dto.permissions,
         "view_dashboard": true
     })
 
 
-    const renderTap = () => {
+    /**
+     * Renders permissions based on the selected tab.
+     * @returns JSX elements representing permissions for the selected tab.
+     */
+    const renderTabPermissions = () => {
+        const selectedPermissions = tab === 0 ? DashboardSettingsPermissions : StaffPermissions;
 
-        switch (tab) {
-            case 0:
-                return (
-                    SettingsList.map((ta: string, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className={"w-full flex items-center justify-between my-4 border-[1px] border-gray-300 rounded-lg py-3 px-6 "}
-                            >
-                                <p
-                                    className={"text-[.9rem] text-gray-black"}
-                                >{convertToTitleCase(ta)}</p>
-                                <Switch
-                                    checked={permissions[ta as keyof AccessLevelPermissions]}
-                                    onCheckedChange={(value) => {
-                                        setPermissions((prevState) =>
-                                            ({
-                                                ...prevState,
-                                                [ta]: value
-                                            }))
-                                    }}
-                                />
-                            </div>
-                        )
-                    })
-                )
-
-            case 1 :
-                return (
-                    EmployeeList.map((ta: string, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className={"w-full flex items-center justify-between my-4 border-[1px] border-gray-300 rounded-lg py-3 px-6 "}
-                            >
-                                <p
-                                    className={"text-[.9rem] text-gray-black"}
-                                >{convertToTitleCase(ta)}</p>
-                                <Switch
-                                    checked={permissions[ta as keyof AccessLevelPermissions]}
-                                    onCheckedChange={(value) => {
-                                        setPermissions((prevState) =>
-                                            ({
-                                                ...prevState,
-                                                [ta]: value
-                                            }))
-                                    }}
-                                />
-                            </div>
-                        )
-                    })
-                )
-        }
-
-    }
-
+        return selectedPermissions.map((permission: string, index) => (
+            <div
+                key={index}
+                className="w-full flex items-center justify-between my-4 border-[1px] border-gray-300 rounded-lg py-3 px-6"
+            >
+                <p className="text-[.9rem] text-gray-black">{convertToTitleCase(permission)}</p>
+                <Switch
+                    checked={permissions[permission as keyof AccessLevelPermissions]}
+                    onCheckedChange={(value) => {
+                        setPermissions((prevPermissions: any) => ({
+                            ...prevPermissions,
+                            [permission]: value
+                        }));
+                    }}
+                />
+            </div>
+        ));
+    };
     return (
         <div
             className={"w-full"}
@@ -141,7 +95,7 @@ export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
             >
 
                 <div className={"w-full"}>
-                    {renderTap()}
+                    {renderTabPermissions()}
                 </div>
             </div>
 
