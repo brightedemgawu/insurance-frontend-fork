@@ -17,9 +17,6 @@ export default function DashboardSideBar() {
     const [smallBar, setSmallBar] = useState<boolean>(false)
     const user = useSelector((state: RootState) => state.auth.authenticatedUser);
 
-    if (!user) {
-        return null
-    }
 
     return (
         <aside
@@ -81,7 +78,7 @@ export default function DashboardSideBar() {
                             avatarClassName={"size-[40px]"}
                             emailClassName={cn("text-[.5rem]", {"hidden": smallBar})}
                             nameClassName={cn("text-[.7rem]", {"hidden": smallBar})}
-                            user={user}
+                            user={user ?? {email: ""}}
                         />
                     </div>
 

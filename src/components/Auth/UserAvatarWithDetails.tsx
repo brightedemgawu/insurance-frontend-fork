@@ -6,12 +6,14 @@ type UserAvatarWithDetailsProps = {
     avatarClassName?: string,
     nameClassName?: string,
     emailClassName?: string,
+    disableBeep?: boolean
 }
 
 export default function UserAvatarWithDetails({
                                                   user,
                                                   emailClassName,
                                                   avatarClassName,
+                                                  disableBeep,
                                                   nameClassName
                                               }: UserAvatarWithDetailsProps) {
     return (
@@ -20,6 +22,7 @@ export default function UserAvatarWithDetails({
         >
             <UserAvatar
                 className={cn("size-[55px]", avatarClassName)}
+                disableBeep={disableBeep}
                 user={user}
             />
 

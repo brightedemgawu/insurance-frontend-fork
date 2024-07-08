@@ -14,7 +14,7 @@ export enum UserTypes {
     Client = "client"
 }
 
-interface Permissions {
+export interface AccessLevelPermissions {
     view_users: boolean;
     manage_users: boolean;
     view_dashboard: boolean;
@@ -25,7 +25,7 @@ interface Permissions {
 interface AccessLevel {
     id: number;
     name: string;
-    permissions: Permissions;
+    permissions: AccessLevelPermissions;
 }
 
 export type DecodedRefreshToken = {

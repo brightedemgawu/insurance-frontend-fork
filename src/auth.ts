@@ -30,6 +30,7 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                         email: decodedToken.email,
                         userType: decodedToken.userType,
                         accessLevel: decodedToken.accessLevel,
+                        token: token
                     } as User;
 
 

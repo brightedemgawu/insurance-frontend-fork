@@ -42,6 +42,11 @@ export default function SettingsLayout({children}: { children: ReactNode }) {
             </div>
 
             {children}
+            <div
+                className={"w-full h-[20px]"}
+            >
+
+            </div>
         </div>
     )
 }

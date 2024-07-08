@@ -14,6 +14,7 @@ export const getAuthenticatedUser = async () => {
         email: session.user?.email,
         userType: session.user?.userType,
         accessLevel: session.user?.accessLevel,
+        token: session.user?.token,
     } as AuthenticatedUser
 
 }

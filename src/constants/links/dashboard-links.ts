@@ -1,4 +1,4 @@
-import {LayoutDashboard, LucideIcon, Settings} from "lucide-react";
+import {LayoutDashboard, LucideIcon, Settings, Users} from "lucide-react";
 
 export type DashboardSideBarLinkItemType = {
     name: string,
@@ -13,7 +13,11 @@ export const dashboardSideBarLinkMainItems: DashboardSideBarLinkItemType[] = [
         link: "/dashboard",
         icon: LayoutDashboard,
     },
-
+    {
+        name: "Staffs",
+        link: "/dashboard/staffs",
+        icon: Users,
+    },
 ]
 
 export const dashboardSideBarLinkSettingItems: DashboardSideBarLinkItemType[] = [

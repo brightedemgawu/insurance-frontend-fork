@@ -73,7 +73,8 @@ export default function SendOtpForm() {
             <ActionButton
                 className={"w-full py-3"}
                 loading={isSubmitting}
-                type={"submit"}>
+                type={"submit"}
+            >
                 SEND OTP CODE
             </ActionButton>
         </form>

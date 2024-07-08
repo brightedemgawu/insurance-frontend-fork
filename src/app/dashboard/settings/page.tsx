@@ -1,5 +1,6 @@
 import {redirect} from 'next/navigation'
 import {SettingsLayoutLinks} from "@/constants/links/dashboard-links";
+import {Skeleton} from "@/components/ui/skeleton";
 
 export default function Page() {
 
@@ -7,5 +8,5 @@ export default function Page() {
         redirect(SettingsLayoutLinks[0].link)
     }
 
-    return <h1>Settings Page</h1>
+    return (<Skeleton className={"w-full h-[55vh]"} />)
 }

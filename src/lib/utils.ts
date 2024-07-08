@@ -59,3 +59,25 @@ export function decodeToken(token: SuccessfulLoginDto): AuthenticatedUser {
     } as AuthenticatedUser
 
 }
+
+
+export function convertToTitleCase(input: string): string {
+    return input
+        .split('_') // Split by underscores
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+        .join(' '); // Join with spaces
+}
+
+export function convertDateToMonthDayYear(dateString: string): string {
+    if (dateString === "") {
+        return "-"
+    }
+    // Create a new Date object from the input date string
+    const date = new Date(dateString);
+
+    // Options for formatting the date
+    const options: Intl.DateTimeFormatOptions = {year: 'numeric', month: 'long', day: 'numeric'};
+
+    // Use the Intl.DateTimeFormat object to format the date
+    return new Intl.DateTimeFormat('en-US', options).format(date);
+}

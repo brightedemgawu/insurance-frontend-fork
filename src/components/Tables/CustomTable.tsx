@@ -13,7 +13,7 @@ export default function CustomTable<TData>({table, columns}: CustomTableProps<TD
     return (
         <div className="w-full rounded-md border-[1px] border-gray-50 ">
             <Table
-                className={"max-w-[100%] "}
+                className={"min-w-[600px] overflow-y-scroll "}
             >
                 <TableHeader
                     className={"bg-gray-50 "}

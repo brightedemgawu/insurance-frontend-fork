@@ -15,27 +15,20 @@ export default function Page() {
                     className={"w-full flex justify-between items-center"}
                 >
                     <p
-                        className={"text-gray-black font-medium text-[1.1rem]"}
-                    >Access Level <span>(89)</span></p>
+                        className={"text-gray-black font-medium text-[.9rem] md:text-[1.1rem]"}
+                    >Access Level </p>
                     <Link
-                        className={cn(buttonStyleVariants())}
-                        href={"/"}>
+                        className={cn(buttonStyleVariants({className:"text-[.8rem]  md:text-[1rem]"}))}
+                        href={"/dashboard/settings/access-level/create"}>
                         <LockKeyhole
                             size={18}
                         />
-                        Add Access Level
+                        Create Access Level
                     </Link>
                 </div>
-
                 <AccessLevelTable/>
-
-
             </main>
-            <div
-                className={"w-full h-[20px]"}
-            >
 
-            </div>
         </>
     )
 }
