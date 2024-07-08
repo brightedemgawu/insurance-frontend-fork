@@ -32,7 +32,6 @@ export default function SettingsLayout({children}: { children: ReactNode }) {
 
                 <LayoutLink/>
 
-
             </div>
 
             {children}

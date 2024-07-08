@@ -1,6 +1,6 @@
 "use client"
 import {Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
-import React from "react";
+import React, {useState} from "react";
 import AppButton from "@/components/Button/AppButton";
 import z from "zod";
 import {SubmitHandler, useForm} from "react-hook-form";
@@ -36,6 +36,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
     accessLevels: ReadAccessLevelDto[]
 }) {
     const authUser = useSelector((state: RootState) => state.auth.authenticatedUser);
+    const [open, setOpen] = useState(false);
 
 
     const {
@@ -62,7 +63,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
                     toast.success("Employee successfully created!")
                     reset()
                     updateTable()
-
+                    setOpen(false)
                 } else {
                     toast.error("Error creating Employee")
                 }
@@ -83,7 +84,9 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
 
 
     return (
-        <Dialog>
+        <Dialog
+            open={open} onOpenChange={setOpen}
+        >
             <DialogTrigger asChild>
                 <div>
 
@@ -167,7 +170,6 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
                         <DialogClose>
                             <ActionButton
                                 variant="destructive"
-                                className={"bg-gray-white text-error-text border-2 hover:bg-gray-white py-2 border-error-border  "}
                                 loading={false}>
                                 Cancel
                             </ActionButton>
