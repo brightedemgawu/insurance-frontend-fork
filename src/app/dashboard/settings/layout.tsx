@@ -1,7 +1,6 @@
 import {ReactNode} from "react";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import {Separator} from "@/components/ui/separator";
-import {SettingsLayoutLinks} from "@/constants/links/dashboard-links";
 import LayoutLink from "@/app/dashboard/settings/_components/LayoutLink";
 
 export default function SettingsLayout({children}: { children: ReactNode }) {
@@ -30,13 +29,8 @@ export default function SettingsLayout({children}: { children: ReactNode }) {
             <div
                 className={"w-full mb-6 flex no-scrollbar items-center max-w-full overflow-y-hidden overflow-x-scroll "}
             >
-                {
-                    SettingsLayoutLinks.map((link, index) => {
-                        return (
-                            <LayoutLink key={index} link={link}/>
-                        )
-                    })
-                }
+
+                <LayoutLink/>
 
 
             </div>

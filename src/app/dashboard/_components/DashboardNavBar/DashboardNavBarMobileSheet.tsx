@@ -8,8 +8,12 @@ import {dashboardSideBarLinkMainItems, dashboardSideBarLinkSettingItems} from "@
 import {Separator} from "@/components/ui/separator";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import SignOutActionButton from "@/components/Auth/SignOutActionButton";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/store";
 
 export default function DashboardNavBarMobileSheet() {
+
+    const user = useSelector((state: RootState) => state.auth.authenticatedUser);
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -40,15 +44,17 @@ export default function DashboardNavBarMobileSheet() {
                                 )}
                             >MAIN</p>
 
-                            <DashboardSideBarLinkMenu links={dashboardSideBarLinkMainItems} smallBar={false}/>
+                            <DashboardSideBarLinkMenu user={user} links={dashboardSideBarLinkMainItems}
+                                                      smallBar={false}/>
 
                             <Separator className={"my-4"}/>
 
-                            <DashboardSideBarLinkMenu links={dashboardSideBarLinkSettingItems} smallBar={false}/>
+                            <DashboardSideBarLinkMenu user={user} links={dashboardSideBarLinkSettingItems}
+                                                      smallBar={false}/>
                         </div>
                     </div>
                     <div
-                    className={"w-full px-4 mb-8"}
+                        className={"w-full px-4 mb-8"}
                     >
                         <SignOutActionButton/>
 

@@ -13,10 +13,11 @@ const PermissionTabs: string[] = ["Settings", "Employees"]
 
 const SettingsPermission = {
     "view_access_levels": false,
-    "manage_access_levels": false
+    "manage_access_levels": false,
+    "view_settings": false
 }
 
-const SettingsList = ["view_access_levels", "manage_access_levels"]
+const SettingsList = ["view_settings", "view_access_levels", "manage_access_levels",]
 
 const EmployeePermission = {
     "view_users": false,

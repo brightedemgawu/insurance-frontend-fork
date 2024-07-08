@@ -19,8 +19,10 @@ import StaffTableFilter from "@/app/dashboard/staffs/_components/StaffTableFilte
 import UserAvatarWithDetails from "@/components/Auth/UserAvatarWithDetails";
 import StaffFormDialog from "@/app/dashboard/staffs/_components/StaffFormDialog";
 import {convertDateToMonthDayYear} from "@/lib/utils";
+import useAccessLevelService from "@/services/access-levels/useAccessLevelService";
+import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
 
-const LIMIT = 15
+const LIMIT = 10
 
 export default function StaffsTable() {
 
@@ -123,7 +125,7 @@ export default function StaffsTable() {
     })
     const {getEmployees} = useUsersService()
 
-    const fetchAccessLevels = async () => {
+    const fetchEmployees = async () => {
         await getEmployees()
             .then((data) => {
                 setTableData(data.data!)
@@ -133,9 +135,26 @@ export default function StaffsTable() {
             })
     }
     useEffect(() => {
-        fetchAccessLevels().then()
+        fetchEmployees().then()
     }, [])
 
+    const {getAccessLevels} = useAccessLevelService()
+
+    const [accessLevels, setAccessLevels] = useState<ReadAccessLevelDto[]>([])
+
+    useEffect(() => {
+        const fetchAccessLevels = async () => {
+            await getAccessLevels()
+                .then((data) => {
+                    setAccessLevels(data.data!)
+                })
+                .catch(errors => {
+                    handleApiErrors(errors)
+                })
+
+        }
+        fetchAccessLevels().then()
+    }, [])
 
     return (
         <div
@@ -151,8 +170,7 @@ export default function StaffsTable() {
                     Staffs
                 </h5>
 
-                <StaffFormDialog updateTable={fetchAccessLevels}/>
-
+                <StaffFormDialog accessLevels={accessLevels} updateTable={fetchEmployees}/>
             </div>
             <div
                 className={"w-full my-6 p-4 bg-gray-white rounded-md"}

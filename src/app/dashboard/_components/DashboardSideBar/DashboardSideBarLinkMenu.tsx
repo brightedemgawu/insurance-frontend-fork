@@ -1,11 +1,14 @@
 import {cn} from "@/lib/utils";
 import {DashboardSideBarLinkItemType} from "@/constants/links/dashboard-links";
 import DashboardSideBarLinkItem from "@/app/dashboard/_components/DashboardSideBar/DashboardSideBarLinkItem";
+import {AuthenticatedUser} from "@/types/authentication";
 
 export default function DashboardSideBarLinkMenu(
-    {links, className, smallBar}:
-        { links: DashboardSideBarLinkItemType[], className?: string, smallBar: boolean }
+    {links, className, smallBar, user}:
+        { links: DashboardSideBarLinkItemType[], className?: string, smallBar: boolean, user: AuthenticatedUser | null }
 ) {
+
+
     return (
         <div
             className={
@@ -21,6 +24,9 @@ export default function DashboardSideBarLinkMenu(
 
             {links.map((link, index) => {
 
+                if (link.predicate && !link.predicate(user)) {
+                    return null
+                }
 
                 return (
                     <DashboardSideBarLinkItem

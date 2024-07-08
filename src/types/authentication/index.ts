@@ -19,6 +19,7 @@ export interface AccessLevelPermissions {
     manage_users: boolean;
     view_dashboard: boolean;
     view_access_levels: boolean;
+    view_settings: boolean;
     manage_access_levels: boolean;
 }
 

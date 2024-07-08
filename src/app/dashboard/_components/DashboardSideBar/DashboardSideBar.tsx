@@ -89,11 +89,11 @@ export default function DashboardSideBar() {
                         )}
                     >MAIN</p>
 
-                    <DashboardSideBarLinkMenu links={dashboardSideBarLinkMainItems} smallBar={smallBar}/>
+                    <DashboardSideBarLinkMenu user={user} links={dashboardSideBarLinkMainItems} smallBar={smallBar}/>
 
                     <Separator className={"my-4"}/>
 
-                    <DashboardSideBarLinkMenu links={dashboardSideBarLinkSettingItems} smallBar={smallBar}/>
+                    <DashboardSideBarLinkMenu user={user} links={dashboardSideBarLinkSettingItems} smallBar={smallBar}/>
                 </div>
 
 

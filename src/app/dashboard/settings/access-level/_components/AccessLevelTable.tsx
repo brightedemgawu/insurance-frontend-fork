@@ -15,8 +15,6 @@ import CustomTable from "@/components/Tables/CustomTable";
 import Pagination from "@/components/Tables/Pagination";
 import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
 import CustomTooltip from "@/components/CustomTooltip";
-import {FilePenLine, Trash2} from "lucide-react";
-import Link from "next/link";
 import UserAvatar from "@/components/Auth/UserAvatar";
 import useAccessLevelService from "@/services/access-levels/useAccessLevelService";
 import {handleApiErrors} from "@/lib/handleApiErrors";
@@ -79,31 +77,7 @@ export default function AccessLevelTable() {
 
             }
         },
-        {
-            id: "actions",
-            cell: ({row}) => {
-                const data = row.original
-                return (
-                    <div className="flex gap-2 items-center">
-                        <CustomTooltip tipContent={"Edit"}>
-                            <Link href={`/dashboard/users/`}>
-                                <FilePenLine
-                                    size={20}
-                                    className={" h-4 w-4 text-gray-text-caption cursor-pointer "}
-                                />
-                            </Link>
-                        </CustomTooltip>
-
-                        <CustomTooltip tipContent={"Delete"}>
-                            <Trash2
-                                size={20}
-                                className={" h-4 w-4 text-error-text cursor-pointer "}
-                            />
-                        </CustomTooltip>
-                    </div>
-                )
-            }
-        }
+      
     ]
 
     const [tableData, setTableData] = useState<ReadAccessLevelDto[]>([])

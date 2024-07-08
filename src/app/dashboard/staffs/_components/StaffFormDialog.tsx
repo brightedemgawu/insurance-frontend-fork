@@ -1,5 +1,5 @@
 "use client"
-import {Dialog, DialogClose, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog";
+import {Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
 import React from "react";
 import AppButton from "@/components/Button/AppButton";
 import z from "zod";
@@ -16,6 +16,8 @@ import {useSelector} from "react-redux";
 import {RootState} from "@/store/store";
 import {useRouter} from "next/navigation";
 import {UserRoundPlus} from "lucide-react";
+import FormSelectInput from "@/components/Form/Inputs/FormTextInput/FormSelectInput";
+import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
 
 
 const schema = z.object({
@@ -23,18 +25,26 @@ const schema = z.object({
     firstName: z.string({message: "name is required"}).min(3, {message: 'Length should be greater than 3 characters'}),
     lastName: z.string({message: "name is required"}).min(3, {message: 'Length should be greater than 3 characters'}),
     otherName: z.string(),
+    accessLevelId: z.string({message: 'Access level is required'}).min(1, {message: "Access level is required"}),
     role: z.string({message: "role is required"})
 });
 
 type FormFields = z.infer<typeof schema>;
 
 
-export default function StaffFormDialog({updateTable}: { updateTable: () => Promise<void> }) {
+export default function StaffFormDialog({updateTable, accessLevels}: {
+    updateTable: () => Promise<void>,
+    accessLevels: ReadAccessLevelDto[]
+}) {
+    const authUser = useSelector((state: RootState) => state.auth.authenticatedUser);
+
+
     const {
         register,
         handleSubmit,
         setError,
         reset,
+        setValue,
         formState: {errors, isSubmitting},
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
@@ -43,9 +53,10 @@ export default function StaffFormDialog({updateTable}: { updateTable: () => Prom
         }
     });
     const router = useRouter();
-    const authUser = useSelector((state: RootState) => state.auth.authenticatedUser);
     const {createEmployee} = useUsersService()
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
+
+
         const dto: CreateEmployeeDto = {...data, userType: data.role, createdBy: authUser!.id}
         await createEmployee(dto)
             .then((response) => {
@@ -62,10 +73,16 @@ export default function StaffFormDialog({updateTable}: { updateTable: () => Prom
                 handleFormApiErrors<FormFields>(errors,
                     setError,
                     Object.keys(schema.shape),
-                    "Failed To Send Otp Code",
+                    "Failed To Create Staff",
                 )
             })
     };
+
+
+    if (authUser && !authUser.accessLevel.permissions.manage_users) {
+        return null
+    }
+
 
     return (
         <Dialog>
@@ -81,20 +98,19 @@ export default function StaffFormDialog({updateTable}: { updateTable: () => Prom
                 </div>
             </DialogTrigger>
 
-            <DialogContent className="w-[95%] sm:max-w-[450px]">
-                <DialogHeader>
+            <DialogContent className="w-[95%]  sm:max-w-[450px]">
+                <DialogTitle>
                     <h1
                         className={"text-[1.1rem] text-gray-text font-[700]"}
                     >
                         Add Staff
                     </h1>
-                </DialogHeader>
+                </DialogTitle>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="w-full flex flex-col gap-[1rem] items-center justify-center"
                 >
                     <FormTextInput<FormFields>
-                        className={"md:h-[45px]"}
                         label="Email"
                         required={true}
                         placeholder="Enter Staff Email"
@@ -104,7 +120,6 @@ export default function StaffFormDialog({updateTable}: { updateTable: () => Prom
                         error={errors.email?.message}
                     />
                     <FormTextInput<FormFields>
-                        className={"md:h-[45px]"}
                         label="First Name"
                         required={true}
                         placeholder="Enter Staff First Name"
@@ -116,7 +131,6 @@ export default function StaffFormDialog({updateTable}: { updateTable: () => Prom
 
                     />
                     <FormTextInput<FormFields>
-                        className={"md:h-[45px]"}
                         label="Last Name"
                         required={true}
                         placeholder="Enter Staff Last Name"
@@ -127,7 +141,6 @@ export default function StaffFormDialog({updateTable}: { updateTable: () => Prom
                     />
 
                     <FormTextInput<FormFields>
-                        className={"md:h-[45px]"}
                         label="Other Name"
                         placeholder="Enter Staff Other Name"
                         register={register}
@@ -135,16 +148,21 @@ export default function StaffFormDialog({updateTable}: { updateTable: () => Prom
                         invalid={!!(errors.otherName && errors.otherName.message)}
                         error={errors.otherName?.message}
                     />
-                    <FormTextInput<FormFields>
-                        className={"md:h-[45px]"}
-                        label="Staff role"
-                        placeholder="Staff role"
+
+                    <FormSelectInput<FormFields>
+                        label="Access Level"
+                        placeholder="Select Staff Access Level"
                         register={register}
-                        disabled={true}
-                        name="role"
-                        invalid={!!(errors.role && errors.role.message)}
-                        error={errors.role?.message}
+                        onValueChange={(value) => {
+                            setValue("accessLevelId", value)
+                        }}
+                        values={accessLevels?.map((item) => ({name: item.name, value: item.id.toString()}))}
+                        name="accessLevelId"
+                        invalid={!!(errors.accessLevelId && errors.accessLevelId.message)}
+                        error={errors.accessLevelId?.message}
                     />
+
+
                     <div
                         className={"w-full flex justify-start items-center gap-2"}
                     >
