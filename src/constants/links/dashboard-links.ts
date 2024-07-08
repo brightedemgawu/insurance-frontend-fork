@@ -10,7 +10,7 @@ export type DashboardSideBarLinkItemType = {
 
 export const dashboardSideBarLinkMainItems: DashboardSideBarLinkItemType[] = [
     {
-        name: "Dashboard",
+        name: "Home",
         link: "/dashboard",
         icon: LayoutDashboard,
         predicate: (user: AuthenticatedUser | null) => {
