@@ -21,7 +21,7 @@ export const dashboardSideBarLinkMainItems: DashboardSideBarLinkItemType[] = [
             if (user.userType === UserTypes.Admin) {
                 return true;
             }
-            return user.accessLevel.permissions.view_dashboard;
+            return user.accessLevel?.permissions?.view_dashboard;
         }
     },
     {
@@ -37,7 +37,7 @@ export const dashboardSideBarLinkMainItems: DashboardSideBarLinkItemType[] = [
             if (user.userType === UserTypes.Admin) {
                 return true;
             }
-            return user.accessLevel.permissions.view_users
+            return user.accessLevel?.permissions?.view_users
         }
     },
 ]
@@ -56,7 +56,7 @@ export const dashboardSideBarLinkSettingItems: DashboardSideBarLinkItemType[] = 
             if (user.userType === UserTypes.Admin) {
                 return true;
             }
-            return user.accessLevel.permissions.view_settings
+            return user.accessLevel?.permissions?.view_settings
         }
     },
 ]
@@ -80,7 +80,7 @@ export const SettingsLayoutLinks: SettingsLayoutLink[] = [
             if (user.userType === UserTypes.Admin) {
                 return true;
             }
-            return user.accessLevel.permissions.view_access_levels
+            return user.accessLevel?.permissions?.view_access_levels
         }
     },
 

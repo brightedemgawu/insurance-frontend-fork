@@ -14,7 +14,6 @@ import {handleFormApiErrors} from "@/lib/handleApiErrors";
 import {toast} from "sonner";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/store";
-import {useRouter} from "next/navigation";
 import {UserRoundPlus} from "lucide-react";
 import FormSelectInput from "@/components/Form/Inputs/FormTextInput/FormSelectInput";
 import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
@@ -52,7 +51,6 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
             role: UserTypes.Employee
         }
     });
-    const router = useRouter();
     const {createEmployee} = useUsersService()
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
 
@@ -79,7 +77,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
     };
 
 
-    if (authUser && !authUser.accessLevel.permissions.manage_users) {
+    if (authUser && !(authUser.userType === UserTypes.Admin || authUser.accessLevel?.permissions?.manage_users)) {
         return null
     }
 
