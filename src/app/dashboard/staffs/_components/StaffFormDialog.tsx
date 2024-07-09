@@ -118,8 +118,8 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
                         placeholder="Enter Staff Email"
                         register={register}
                         name="email"
-                        invalid={!!(errors.email && errors.email.message)}
-                        error={errors.email?.message}
+                        errors={errors}
+
                     />
                     <FormTextInput<FormFields>
                         label="First Name"
@@ -127,8 +127,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
                         placeholder="Enter Staff First Name"
                         register={register}
                         name="firstName"
-                        invalid={!!(errors.firstName && errors.firstName.message)}
-                        error={errors.firstName?.message}
+                        errors={errors}
 
 
                     />
@@ -138,8 +137,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
                         placeholder="Enter Staff Last Name"
                         register={register}
                         name="lastName"
-                        invalid={!!(errors.lastName && errors.lastName.message)}
-                        error={errors.lastName?.message}
+                        errors={errors}
                     />
 
                     <FormTextInput<FormFields>
@@ -147,11 +145,11 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
                         placeholder="Enter Staff Other Name"
                         register={register}
                         name="otherName"
-                        invalid={!!(errors.otherName && errors.otherName.message)}
-                        error={errors.otherName?.message}
+                        errors={errors}
                     />
 
                     <FormSelectInput<FormFields>
+                        required={true}
                         label="Access Level"
                         placeholder="Select Staff Access Level"
                         register={register}
@@ -160,8 +158,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
                         }}
                         values={accessLevels?.map((item) => ({name: item.name, value: item.id.toString()}))}
                         name="accessLevelId"
-                        invalid={!!(errors.accessLevelId && errors.accessLevelId.message)}
-                        error={errors.accessLevelId?.message}
+                        errors={errors}
                     />
 
 

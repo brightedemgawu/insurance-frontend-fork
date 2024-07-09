@@ -1,3 +1,5 @@
+"use client"
+
 import {z} from "zod";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -11,7 +13,7 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-function Demo() {
+export default function Demo() {
 
     const {
         register,
@@ -40,9 +42,7 @@ function Demo() {
                     placeholder="Email"
                     register={register}
                     name="email"
-                    invalid={!!(errors.email && errors.email.message)}
-                    error={errors.email?.message}
-
+                    errors={errors}
                 />
                 <FormTextInput<FormFields>
                     label="Password"
@@ -50,8 +50,8 @@ function Demo() {
                     placeholder="Password"
                     register={register}
                     name="password"
-                    invalid={!!(errors.password && errors.password.message)}
-                    error={errors.password?.message}/>
+                    errors={errors}
+                />
 
                 <ActionButton
                     loading={isSubmitting}

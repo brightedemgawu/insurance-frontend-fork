@@ -1,7 +1,8 @@
 import {VariantProps} from "class-variance-authority";
 import {inputStyleVariants} from "@/components/Form/Inputs/inputStyleVariants";
 import {cn} from "@/lib/utils";
-import InputWrapper, {InputWrapperProps} from "@/components/Form/Inputs/InputWrapper";
+import {InputWrapperProps} from "@/components/Form/Inputs/InputWrapper";
+import Wrapper from "@/components/Form/Inputs/Wrapper";
 
 export type AppTextInputProps = Omit<InputWrapperProps, "children"> & VariantProps<typeof inputStyleVariants> & {
     inputRef?: React.Ref<HTMLInputElement>;
@@ -29,7 +30,8 @@ export default function AppTextInput({
                                          ...props
                                      }: AppTextInputProps) {
     return (
-        <InputWrapper
+
+        <Wrapper
             error={error}
             Icon={Icon}
             required={required}
@@ -52,7 +54,6 @@ export default function AppTextInput({
                 )}
                 {...props}
             />
-        </InputWrapper>
-
+        </Wrapper>
     )
 }

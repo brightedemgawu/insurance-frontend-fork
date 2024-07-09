@@ -42,8 +42,7 @@ export default function BasicInfoForm({dto, onChangeTap}: {
                 placeholder="Enter Access level name"
                 register={register}
                 name="name"
-                invalid={!!(errors.name && errors.name.message)}
-                error={errors.name?.message}
+                errors={errors}
 
             />
             <FormTextAreaInput<FormFields>
@@ -53,9 +52,7 @@ export default function BasicInfoForm({dto, onChangeTap}: {
                 placeholder="Description"
                 register={register}
                 name="description"
-                invalid={!!(errors.description && errors.description.message)}
-                error={errors.description?.message}
-
+                errors={errors}
             />
             <div
                 className={"w-full"}

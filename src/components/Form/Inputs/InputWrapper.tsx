@@ -45,7 +45,11 @@ export default function InputWrapper({
                 {Icon &&
                     <Icon
                         size={15}
-                        className={cn("text-gray-600 absolute top-0 left-[.6rem] h-full  pointer-events-none")}
+                        className={
+                            cn([
+                                "text-gray-600 absolute top-0 left-[.6rem] h-full  pointer-events-none",
+                                "group-data-[invalid=true]:text-error-text"
+                            ])}
                     />
                 }
 
@@ -58,7 +62,7 @@ export default function InputWrapper({
                 />
             </div>
             <div className={cn([
-                    "hidden  font-normal text-[.8rem] text-error-text",
+                    "hidden font-normal text-[.8rem] text-error-text",
                     "hidden group-data-[invalid=true]:inline-block"
                 ]
             )}>

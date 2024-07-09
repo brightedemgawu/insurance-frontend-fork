@@ -66,8 +66,7 @@ export default function SendOtpForm() {
                 placeholder="Enter your email"
                 register={register}
                 name="email"
-                invalid={!!(errors.email && errors.email.message)}
-                error={errors.email?.message}
+                errors={errors}
 
             />
             <ActionButton

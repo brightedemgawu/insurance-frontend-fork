@@ -1,24 +1,15 @@
-import {FieldValues, UseFormRegister} from "react-hook-form";
-import InputWrapper, {InputWrapperProps} from "@/components/Form/Inputs/InputWrapper";
-import {VariantProps} from "class-variance-authority";
+import {FieldValues} from "react-hook-form";
 import {inputStyleVariants} from "@/components/Form/Inputs/inputStyleVariants";
 import React from "react";
 import {cn} from "@/lib/utils";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {FormInputProps} from "@/components/Form/Inputs/utils";
+import Wrapper from "@/components/Form/Inputs/Wrapper";
 
 interface FormSelectInputProps<T extends FieldValues>
-    extends Omit<InputWrapperProps, "name" | "children">,
-        VariantProps<typeof inputStyleVariants> {
-    register: UseFormRegister<T>;
+    extends FormInputProps<T> {
     values: { name: string, value: string }[],
-    name: keyof T;
-    inputRef?: React.Ref<HTMLInputElement>;
-    disabled?: boolean;
-    placeholder?: string;
-    type?: "text" | "password";
-    className?: string,
     onValueChange: (value: string) => void,
-    wrapperClassName?: string
 }
 
 export default function FormSelectInput<T extends FieldValues>(
@@ -36,17 +27,17 @@ export default function FormSelectInput<T extends FieldValues>(
         inputRef,
         className,
         onValueChange,
-        error,
+        errors,
         ...props
     }: FormSelectInputProps<T>
 ) {
     return (
-        <InputWrapper
-            error={error}
+        <Wrapper
+            error={errors[name]?.message as string}
             Icon={Icon}
             required={required}
             name={name as string}
-            invalid={invalid}
+            invalid={invalid || !!(errors[name] && errors[name].message)}
             label={label}
             className={wrapperClassName}
         >
@@ -75,7 +66,6 @@ export default function FormSelectInput<T extends FieldValues>(
                     })}
                 </SelectContent>
             </Select>
-        </InputWrapper>
-
+        </Wrapper>
     );
 }

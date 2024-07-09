@@ -1,49 +1,35 @@
-import {FieldValues, Path, UseFormRegister} from "react-hook-form";
+import {FieldValues, Path} from "react-hook-form";
 import {cn} from "@/lib/utils";
 import {inputStyleVariants} from "@/components/Form/Inputs/inputStyleVariants";
 import React from "react";
-import InputWrapper, {InputWrapperProps} from "@/components/Form/Inputs/InputWrapper";
-import {VariantProps} from "class-variance-authority";
-
-interface FormTextInputProps<T extends FieldValues>
-    extends Omit<InputWrapperProps, "name" | "children">,
-        VariantProps<typeof inputStyleVariants> {
-    register: UseFormRegister<T>;
-    name: keyof T;
-    inputRef?: React.Ref<HTMLInputElement>;
-    disabled?: boolean;
-    placeholder?: string;
-    type?: "text" | "password";
-    className?: string,
-    wrapperClassName?: string
-}
+import {FormInputProps} from "@/components/Form/Inputs/utils";
+import Wrapper from "@/components/Form/Inputs/Wrapper";
 
 export default function FormTextInput<T extends FieldValues>({
-                                                                 register, name,
-                                                                 Icon,
-                                                                 required,
-                                                                 disabled,
+                                                                 register,
+                                                                 name,
                                                                  type,
+                                                                 disabled,
                                                                  invalid,
                                                                  variant,
-                                                                 wrapperClassName,
-                                                                 label,
-                                                                 inputRef,
                                                                  className,
-                                                                 error,
+                                                                 Icon,
+                                                                 errors,
+                                                                 required,
+                                                                 label,
+                                                                 wrapperClassName,
                                                                  ...props
-                                                             }: FormTextInputProps<T>) {
+                                                             }: FormInputProps<T>) {
     return (
-        <InputWrapper
-            error={error}
+        <Wrapper
+            error={errors[name]?.message as string}
             Icon={Icon}
             required={required}
             name={name as string}
-            invalid={invalid}
+            invalid={invalid || !!(errors[name] && errors[name].message)}
             label={label}
             className={wrapperClassName}
         >
-
             <input
                 type={type}
                 disabled={disabled}
@@ -56,7 +42,7 @@ export default function FormTextInput<T extends FieldValues>({
                 )}
                 {...props}
             />
-        </InputWrapper>
 
+        </Wrapper>
     );
 }

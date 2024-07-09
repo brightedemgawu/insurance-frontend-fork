@@ -1,21 +1,10 @@
-import {FieldValues, Path, UseFormRegister} from "react-hook-form";
-import InputWrapper, {InputWrapperProps} from "@/components/Form/Inputs/InputWrapper";
-import {VariantProps} from "class-variance-authority";
+import {FieldValues, Path} from "react-hook-form";
 import {inputStyleVariants} from "@/components/Form/Inputs/inputStyleVariants";
 import React from "react";
 import {cn} from "@/lib/utils";
+import {FormInputProps} from "@/components/Form/Inputs/utils";
+import Wrapper from "@/components/Form/Inputs/Wrapper";
 
-interface FormTextAreaInputProps<T extends FieldValues>
-    extends Omit<InputWrapperProps, "name" | "children">,
-        VariantProps<typeof inputStyleVariants> {
-    register: UseFormRegister<T>;
-    name: keyof T;
-    inputRef?: React.Ref<HTMLInputElement>;
-    disabled?: boolean;
-    placeholder?: string;
-    className?: string,
-    wrapperClassName?: string
-}
 
 export default function FormTextAreaInput<T extends FieldValues>({
                                                                      register, name,
@@ -28,19 +17,20 @@ export default function FormTextAreaInput<T extends FieldValues>({
                                                                      label,
                                                                      inputRef,
                                                                      className,
-                                                                     error,
+                                                                     errors,
                                                                      ...props
-                                                                 }: FormTextAreaInputProps<T>) {
+                                                                 }: FormInputProps<T>) {
     return (
-        <InputWrapper
-            error={error}
+        <Wrapper
+            error={errors[name]?.message as string}
             Icon={Icon}
             required={required}
             name={name as string}
-            invalid={invalid}
+            invalid={invalid || !!(errors[name] && errors[name].message)}
             label={label}
             className={wrapperClassName}
         >
+
 
             <textarea
                 disabled={disabled}
@@ -53,6 +43,6 @@ export default function FormTextAreaInput<T extends FieldValues>({
                 )}
                 {...props}
             />
-        </InputWrapper>
+        </Wrapper>
     )
 }
