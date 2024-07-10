@@ -127,11 +127,7 @@ export default function AccessLevelTable() {
             className={"w-full"}
         >
             <AccessLevelTableFilter table={table}/>
-            <div
-            className={"min-h-[40vh]"}
-            >
-                <CustomTable table={table} columns={usersColumns}/>
-            </div>
+            <CustomTable table={table} columns={usersColumns}/>
             <Pagination table={table}/>
         </div>
     )

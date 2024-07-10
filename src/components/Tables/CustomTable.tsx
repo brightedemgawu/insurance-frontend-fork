@@ -11,9 +11,9 @@ interface CustomTableProps<TData> {
 
 export default function CustomTable<TData>({table, columns}: CustomTableProps<TData>) {
     return (
-        <div className="w-full rounded-md border-[1px] border-gray-50 ">
+        <div className="w-full min-h-[50vh]  rounded-md border-[1px] border-gray-50 ">
             <Table
-                className={"min-w-[600px] overflow-y-scroll "}
+                className={"min-w-[600px]  overflow-y-scroll "}
             >
                 <TableHeader
                     className={"bg-gray-50 "}

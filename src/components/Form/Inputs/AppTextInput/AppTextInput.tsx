@@ -7,8 +7,9 @@ import Wrapper from "@/components/Form/Inputs/Wrapper";
 export type AppTextInputProps = Omit<InputWrapperProps, "children"> & VariantProps<typeof inputStyleVariants> & {
     inputRef?: React.Ref<HTMLInputElement>;
     disabled?: boolean;
+    defaultValue?: string | number;
     placeholder?: string;
-    type?: "text" | "password";
+    type?: "text" | "password" | "number";
     className?: string,
     onChange?: (value: string) => void | Promise<void>
 }
@@ -23,6 +24,7 @@ export default function AppTextInput({
                                          variant,
                                          label,
                                          inputRef,
+                                         defaultValue,
                                          className,
                                          name,
                                          onChange,
@@ -41,6 +43,7 @@ export default function AppTextInput({
         >
             <input
                 ref={inputRef}
+                defaultValue={defaultValue}
                 type={type}
                 disabled={disabled}
                 id={name}

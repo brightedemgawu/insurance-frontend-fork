@@ -113,6 +113,12 @@
         box-sizing: border-box;
     }
 
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
     body {
         @apply w-full h-[100vh] bg-gray-100 max-w-full overflow-x-hidden;
     }
@@ -148,13 +154,13 @@
         background-color: #F5F5F5;
     }
 
-     .custom-tab-scrollbar::-webkit-scrollbar-thumb {
+    .custom-tab-scrollbar::-webkit-scrollbar-thumb {
         border-radius: 10px;
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
         background-color: rgba(159, 159, 159, 0.53);
     }
-    
-    
+
+
     .bg-glass-morphic {
         background: rgba(255, 255, 255, 0.2);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);

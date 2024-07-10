@@ -69,8 +69,8 @@ export function convertToTitleCase(input: string): string {
 }
 
 export function convertDateToMonthDayYear(dateString: string): string {
-    if (dateString === "") {
-        return "-"
+    if (dateString === "" ) {
+        return "NaN"
     }
     // Create a new Date object from the input date string
     const date = new Date(dateString);

@@ -10,6 +10,8 @@ import {
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
+    getSortedRowModel,
+    SortingState,
     Table
 } from "@tanstack/table-core";
 import {useReactTable} from "@tanstack/react-table";
@@ -21,24 +23,41 @@ import StaffFormDialog from "@/app/dashboard/staffs/_components/StaffFormDialog"
 import {convertDateToMonthDayYear} from "@/lib/utils";
 import useAccessLevelService from "@/services/access-levels/useAccessLevelService";
 import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
+import {CaretSortIcon} from "@radix-ui/react-icons";
+import AppButton from "@/components/Button/AppButton";
 
-const LIMIT = 10
+const LIMIT = 5
 
 export default function StaffsTable() {
-
+    const [sorting, setSorting] = useState<SortingState>([])
     const usersColumns: ColumnDef<EmployeeReadDto>[] = [
         {
             accessorKey: "email",
-            header: "Staff",
+            header: ({column}) => {
+                return (
+                    <AppButton
+                        variant={"link"}
+                        className={"p-0 gap-1 font-medium hover:text-gray-text focus:ring-0 "}
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        Email
+                        <CaretSortIcon className=" h-4 w-4"/>
+                    </AppButton>
+                )
+            },
             cell: ({row}) => {
                 const staff = row.original
 
                 return (
-                    <UserAvatarWithDetails
-                        nameClassName={"text-[.8rem]"}
-                        disableBeep
-                        user={staff}
-                    />
+                    <div
+                        className={"w-[250px] overflow-hidden "}
+                    >
+                        <UserAvatarWithDetails
+                            nameClassName={"text-[.8rem]"}
+                            disableBeep
+                            user={staff}
+                        />
+                    </div>
                 )
 
             }
@@ -48,18 +67,14 @@ export default function StaffsTable() {
             header: "Phone",
             cell: ({row}) => {
                 const staff = row.original
-                if (staff && staff.employeeInfo) {
-                    return (
-                        <p>{staff.employeeInfo.phone ?
-                            `+${staff.employeeInfo.phone}` :
-                            "-"
+                return <p
+                    className={"w-[150px] text-[.9rem] "}
+                >
+                    {
+                        staff && staff.employeeInfo && staff.employeeInfo.phone ? `+${staff.employeeInfo.phone}` : "NaN"
+                    }
+                </p>
 
-                        }</p>
-                    )
-                }
-                return (
-                    "-"
-                )
 
             }
         },
@@ -75,26 +90,51 @@ export default function StaffsTable() {
                 }
                 return (<p
                     className={"w-fit px-4 py-2 italic text-center text-[.8rem] rounded-md bg-error-100"}
-                >Deactivated</p>)
+                >Archived</p>)
             }
         },
         {
             accessorKey: "updatedAt",
-            header: "Updated At",
+            header: ({column}) => {
+                return (
+                    <AppButton variant={"link"}
+                               className={"p-0 gap-1 font-medium hover:text-gray-text focus:ring-0 "}
+                               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        Updated At
+                        <CaretSortIcon className=" h-4 w-4"/>
+                    </AppButton>
+                )
+            },
+
             cell: ({row}) => {
                 const user = row.original;
                 return (
-                    <p>{convertDateToMonthDayYear(user.updatedAt?.toString() ?? "")}</p>
+                    <p
+                        className={"w-[120px]"}
+                    >{convertDateToMonthDayYear(user.updatedAt?.toString() ?? "")}</p>
                 )
             }
         },
         {
             accessorKey: "createdAt",
-            header: "Created At",
+            header: ({column}) => {
+                return (
+                    <AppButton variant={"link"}
+                               className={"p-0 gap-1 font-medium hover:text-gray-text focus:ring-0 "}
+                               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        Created At
+                        <CaretSortIcon className=" h-4 w-4"/>
+                    </AppButton>
+                )
+            },
             cell: ({row}) => {
                 const user = row.original;
                 return (
-                    <p>{convertDateToMonthDayYear(user.createdAt.toString())}</p>
+                    <p
+                        className={"w-[120px]"}
+                    >{convertDateToMonthDayYear(user.createdAt.toString())}</p>
                 )
             }
         },
@@ -106,7 +146,6 @@ export default function StaffsTable() {
         []
     )
 
-
     const table: Table<EmployeeReadDto> = useReactTable({
         data: tableData,
         columns: usersColumns,
@@ -114,8 +153,11 @@ export default function StaffsTable() {
         onColumnFiltersChange: setColumnFilters,
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        onSortingChange: setSorting,
         state: {
             columnFilters,
+            sorting,
         },
         initialState: {
             pagination: {
@@ -124,7 +166,7 @@ export default function StaffsTable() {
         }
     })
     const {getEmployees} = useUsersService()
-
+    console.log(table.getState().sorting)
     const fetchEmployees = async () => {
         await getEmployees()
             .then((data) => {
@@ -173,7 +215,7 @@ export default function StaffsTable() {
                 <StaffFormDialog accessLevels={accessLevels} updateTable={fetchEmployees}/>
             </div>
             <div
-                className={"w-full my-6 p-4 bg-gray-white rounded-md"}
+                className={"w-full my-6 py-8 px-6 bg-gray-white rounded-md"}
             >
                 <StaffTableFilter table={table}/>
                 <CustomTable table={table} columns={usersColumns}/>
