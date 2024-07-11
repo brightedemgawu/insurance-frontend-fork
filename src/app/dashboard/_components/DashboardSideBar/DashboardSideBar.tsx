@@ -68,7 +68,7 @@ export default function DashboardSideBar() {
                 >
 
                     <div
-                        className={cn("border-[1px]  border-gray-300 rounded-md drop-shadow-2xl bg-gray-white p-4 ",
+                        className={cn("border-[1px]  border-gray-300 rounded-md drop-shadow-md bg-gray-white p-4 ",
                             {
                                 "w-fit px-0 py-0 mx-auto bg-gray-white/0  flex justify-center items-center border-0 ": smallBar
                             }

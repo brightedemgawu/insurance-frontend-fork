@@ -72,11 +72,11 @@ export default function StaffTableFilter<TData>({table}: StaffTableFilterProps<T
                         <div>
                             <AppButton
                                 variant={"light"}
-                                className={"h-[40px] text-[.9rem] shadow-sm "}
+                                className={"h-[40px] text-gray-800 border-gray-400 text-[.9rem] shadow-sm "}
                             >
                                 <Filter
                                     size={18}
-                                    className={"text-gray-700"}
+                                    className={"text-gray-400"}
                                 />
                                 Filter
                             </AppButton>

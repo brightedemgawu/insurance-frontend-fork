@@ -18,19 +18,10 @@ export function formatUserName(name: string = ""): string {
 }
 
 export function formatUserEmail(email: string = ""): string {
-    // Validate the email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        return email;
-    }
 
-    // Split the email into username and domain
-
-    // Truncate the username to the first 16 characters if it exceeds 17 characters
-    const truncatedUsername = email.length > 17 ? email.slice(0, 16) : email;
 
     // Construct the new format
-    return `@${truncatedUsername}`;
+    return email.length > 26 ? email.slice(0, 25) : email;
 }
 
 /**
@@ -69,7 +60,7 @@ export function convertToTitleCase(input: string): string {
 }
 
 export function convertDateToMonthDayYear(dateString: string): string {
-    if (dateString === "" ) {
+    if (dateString === "") {
         return "NaN"
     }
     // Create a new Date object from the input date string

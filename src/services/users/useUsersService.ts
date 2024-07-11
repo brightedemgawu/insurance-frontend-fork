@@ -3,6 +3,7 @@ import {useCallback} from "react";
 import ApiResponse from "@/types/ApiResponse";
 import {EmployeeReadDto} from "@/services/users/dto/Response/EmployeeReadDto";
 import {CreateEmployeeDto} from "@/services/users/dto/Request/CreateEmployeeDto";
+import {UpdateEmployeeDto} from "@/services/users/dto/Request/UpdateEmployeeDto";
 
 const useUsersService = () => {
     const apiService = useApiService();
@@ -12,14 +13,21 @@ const useUsersService = () => {
         return response.data;
     }, [apiService]);
 
+
     const createEmployee = useCallback(async (data: CreateEmployeeDto): Promise<ApiResponse<CreateEmployeeDto>> => {
         const response = await apiService.post<ApiResponse<CreateEmployeeDto>>('/user/create-user', data);
+        return response.data;
+    }, [apiService]);
+
+    const updatedEmployee = useCallback(async (data: UpdateEmployeeDto): Promise<ApiResponse<EmployeeReadDto>> => {
+        const response = await apiService.put<ApiResponse<EmployeeReadDto>>('/user/update-user', data);
         return response.data;
     }, [apiService]);
 
     return {
         getEmployees,
         createEmployee,
+        updatedEmployee,
     }
 }
 

@@ -1,4 +1,4 @@
-import {Dialog, DialogClose, DialogContent, DialogTrigger} from "@/components/ui/dialog";
+import {Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
 import React, {useState} from "react";
 import ActionButton from "@/components/Button/ActionButton";
 
@@ -11,21 +11,27 @@ type ConfirmationDialogProps = {
 
 export default function ConfirmationDialog({children, heading, trigger, OnAction}: ConfirmationDialogProps) {
 
+    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState<boolean>(false)
 
     return (
-        <Dialog>
+        <Dialog
+            open={open} onOpenChange={setOpen}
+        >
             <DialogTrigger asChild>
                 <div>
                     {trigger}
                 </div>
             </DialogTrigger>
             <DialogContent className="w-[95%] sm:max-w-[400px]">
-                <h1
-                    className={"text-[1.1rem] text-gray-text font-[700]"}
-                >
-                    {heading}
-                </h1>
+                <DialogHeader>
+                    <DialogTitle
+                        className={"text-left text-[1.1rem] text-gray-text font-[700]"}
+                    >
+                        {heading}
+                    </DialogTitle>
+                </DialogHeader>
+
 
                 {
                     children || (
@@ -52,8 +58,8 @@ export default function ConfirmationDialog({children, heading, trigger, OnAction
                         onClick={async () => {
                             setLoading(true)
                             await OnAction()
-
                             setLoading(false)
+                            setOpen(false)
                         }}
                         loading={loading}>
                         Confirm

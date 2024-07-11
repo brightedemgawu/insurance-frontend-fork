@@ -20,29 +20,48 @@ import Pagination from "@/components/Tables/Pagination";
 import StaffTableFilter from "@/app/dashboard/staffs/_components/StaffTableFilter";
 import UserAvatarWithDetails from "@/components/Auth/UserAvatarWithDetails";
 import StaffFormDialog from "@/app/dashboard/staffs/_components/StaffFormDialog";
-import {convertDateToMonthDayYear} from "@/lib/utils";
+import {convertDateToMonthDayYear, userMeetsRequiredPermissions} from "@/lib/utils";
 import useAccessLevelService from "@/services/access-levels/useAccessLevelService";
 import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
-import {CaretSortIcon} from "@radix-ui/react-icons";
-import AppButton from "@/components/Button/AppButton";
+import SortableTableHeader from "@/components/Tables/SortableTableHeader";
+import CustomTooltip from "@/components/CustomTooltip";
+import {ArchiveX} from "lucide-react";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
+import {MANAGE_STAFFS_PERMISSION} from "@/types/authentication/access-level-permissions";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/store";
 
 const LIMIT = 5
 
 export default function StaffsTable() {
+    const {getEmployees} = useUsersService()
+    const {getAccessLevels} = useAccessLevelService()
+
+    const [accessLevels, setAccessLevels] = useState<ReadAccessLevelDto[]>([])
     const [sorting, setSorting] = useState<SortingState>([])
-    const usersColumns: ColumnDef<EmployeeReadDto>[] = [
+
+    const authenticatedUser = useSelector((state: RootState) => state.auth.authenticatedUser);
+    const [canAuthenticatedUserManageStaff, setCanAuthenticatedUserManageStaff] = useState<boolean>(false)
+
+
+    useEffect(() => {
+
+        if (authenticatedUser) {
+            setCanAuthenticatedUserManageStaff(userMeetsRequiredPermissions(authenticatedUser, [MANAGE_STAFFS_PERMISSION]))
+        }
+
+    }, [authenticatedUser]);
+
+    const tableColumns: ColumnDef<EmployeeReadDto>[] = [
         {
             accessorKey: "email",
             header: ({column}) => {
                 return (
-                    <AppButton
-                        variant={"link"}
-                        className={"p-0 gap-1 font-medium hover:text-gray-text focus:ring-0 "}
+                    <SortableTableHeader
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
                         Email
-                        <CaretSortIcon className=" h-4 w-4"/>
-                    </AppButton>
+                    </SortableTableHeader>
                 )
             },
             cell: ({row}) => {
@@ -97,13 +116,12 @@ export default function StaffsTable() {
             accessorKey: "updatedAt",
             header: ({column}) => {
                 return (
-                    <AppButton variant={"link"}
-                               className={"p-0 gap-1 font-medium hover:text-gray-text focus:ring-0 "}
-                               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    <SortableTableHeader
+
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
                         Updated At
-                        <CaretSortIcon className=" h-4 w-4"/>
-                    </AppButton>
+                    </SortableTableHeader>
                 )
             },
 
@@ -120,13 +138,11 @@ export default function StaffsTable() {
             accessorKey: "createdAt",
             header: ({column}) => {
                 return (
-                    <AppButton variant={"link"}
-                               className={"p-0 gap-1 font-medium hover:text-gray-text focus:ring-0 "}
-                               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    <SortableTableHeader
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
                         Created At
-                        <CaretSortIcon className=" h-4 w-4"/>
-                    </AppButton>
+                    </SortableTableHeader>
                 )
             },
             cell: ({row}) => {
@@ -138,17 +154,61 @@ export default function StaffsTable() {
                 )
             }
         },
+        {
+            id: "actions",
+            cell: ({row}) => {
+                const data = row.original
+                if (!canAuthenticatedUserManageStaff) {
+                    return;
+                }
+                return (
+                    <div className="flex gap-2 items-center">
+                        <CustomTooltip tipContent={"Edit"}>
+                            <StaffFormDialog
+                                dto={data}
+                                authenticatedUser={authenticatedUser!.id}
+                                accessLevels={accessLevels} updateTable={fetchEmployees}/>
+                        </CustomTooltip>
 
+                        <ConfirmationDialog
+                            heading={"Archive Staff"}
+                            trigger={
+                                <CustomTooltip tipContent={"Archive"}>
+                                    <ArchiveX
+                                        size={20}
+                                        className={" h-4 w-4 text-error-text cursor-pointer "}
+                                    />
+                                </CustomTooltip>
+                            }
+                            OnAction={async () => {
+
+                            }}>
+                            <p
+                                className={"text-[.9rem]"}
+                            >
+                                Are you sure you want to archive {""}
+                                <span
+                                    className={"font-bold"}
+                                >
+                                    {data.name}?
+                                </span>
+                                <br/>
+                            </p>
+                        </ConfirmationDialog>
+
+                    </div>
+                )
+            }
+        }
     ]
 
     const [tableData, setTableData] = useState<EmployeeReadDto[]>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         []
     )
-
     const table: Table<EmployeeReadDto> = useReactTable({
         data: tableData,
-        columns: usersColumns,
+        columns: tableColumns,
         getCoreRowModel: getCoreRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getPaginationRowModel: getPaginationRowModel(),
@@ -165,8 +225,7 @@ export default function StaffsTable() {
             }
         }
     })
-    const {getEmployees} = useUsersService()
-    console.log(table.getState().sorting)
+
     const fetchEmployees = async () => {
         await getEmployees()
             .then((data) => {
@@ -176,13 +235,10 @@ export default function StaffsTable() {
                 handleApiErrors(errors)
             })
     }
+
     useEffect(() => {
         fetchEmployees().then()
     }, [])
-
-    const {getAccessLevels} = useAccessLevelService()
-
-    const [accessLevels, setAccessLevels] = useState<ReadAccessLevelDto[]>([])
 
     useEffect(() => {
         const fetchAccessLevels = async () => {
@@ -207,18 +263,26 @@ export default function StaffsTable() {
                 className={"w-full my-2 flex items-center justify-between"}
             >
                 <h5
-                    className={"text-[1.5rem] font-bold text-gray-text"}
+                    className={"text-[1.2rem] font-bold text-gray-text"}
                 >
-                    Staffs
-                </h5>
+                    Staffs{" "}
+                    <span
+                        className={"text-gray-700"}
+                    >
+                        ({table.getPrePaginationRowModel().rows.length})
+                    </span></h5>
 
-                <StaffFormDialog accessLevels={accessLevels} updateTable={fetchEmployees}/>
+                {canAuthenticatedUserManageStaff &&
+                    <StaffFormDialog
+                        authenticatedUser={authenticatedUser!.id}
+                        accessLevels={accessLevels} updateTable={fetchEmployees}/>
+                }
             </div>
             <div
                 className={"w-full my-6 py-8 px-6 bg-gray-white rounded-md"}
             >
                 <StaffTableFilter table={table}/>
-                <CustomTable table={table} columns={usersColumns}/>
+                <CustomTable table={table} columns={tableColumns}/>
                 <Pagination table={table}/>
             </div>
         </div>

@@ -18,7 +18,7 @@ export default function Pagination<TData>({table}: PaginationProps<TData>) {
     }, 300)
 
     return (
-        <div className="w-full my-4 flex justify-between items-center px-2">
+        <div className="w-full my-4 flex flex-col  gap-2 md:flex-row md:justify-between md:items-center px-2">
             <p className={"text-gray-800 text-[.9rem]"}>
                 Page {' '}
                 <span

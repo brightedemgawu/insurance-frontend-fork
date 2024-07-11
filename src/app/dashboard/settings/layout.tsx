@@ -16,7 +16,9 @@ export default function SettingsLayout({children}: { children: ReactNode }) {
                 >
                     Settings
                 </h4>
-                <CustomBreadCrumb basePath={"/dashboard/settings"}/>
+                <CustomBreadCrumb
+                    basePath={"/dashboard/settings"}
+                />
             </div>
             <p
                 className={"font-[400] text-gray-text-caption text-[.9rem] "}

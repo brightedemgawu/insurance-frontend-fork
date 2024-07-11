@@ -9,6 +9,7 @@ import Wrapper from "@/components/Form/Inputs/Wrapper";
 interface FormSelectInputProps<T extends FieldValues>
     extends FormInputProps<T> {
     values: { name: string, value: string }[],
+    defaultValue?: string,
     onValueChange: (value: string) => void,
 }
 
@@ -26,6 +27,7 @@ export default function FormSelectInput<T extends FieldValues>(
         label,
         inputRef,
         className,
+        defaultValue,
         onValueChange,
         errors,
         ...props
@@ -43,6 +45,7 @@ export default function FormSelectInput<T extends FieldValues>(
         >
 
             <Select
+                defaultValue={defaultValue}
                 onValueChange={onValueChange}
                 disabled={disabled}
             >

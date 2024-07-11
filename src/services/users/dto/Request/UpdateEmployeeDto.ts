@@ -1,4 +1,4 @@
-export interface CreateEmployeeDto {
+export interface UpdateEmployeeDto {
     email: string;
     firstName: string;
     lastName: string;
@@ -10,6 +10,6 @@ export interface CreateEmployeeDto {
     phone?: string;
     photo?: string;
     userType: string;
-    createdBy: number;
+    updatedBy: number;
     accessLevelId: string;
 }

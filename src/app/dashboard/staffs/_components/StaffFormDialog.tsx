@@ -1,6 +1,6 @@
 "use client"
-import {Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
-import React, {useState} from "react";
+import {Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import React, {useEffect, useState} from "react";
 import AppButton from "@/components/Button/AppButton";
 import z from "zod";
 import {SubmitHandler, useForm} from "react-hook-form";
@@ -12,12 +12,11 @@ import useUsersService from "@/services/users/useUsersService";
 import {CreateEmployeeDto} from "@/services/users/dto/Request/CreateEmployeeDto";
 import {handleFormApiErrors} from "@/lib/handleApiErrors";
 import {toast} from "sonner";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/store";
-import {UserRoundPlus} from "lucide-react";
+import {FilePenLine, UserRoundPlus} from "lucide-react";
 import FormSelectInput from "@/components/Form/Inputs/FormTextInput/FormSelectInput";
 import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
-import {userMeetsRequiredPermissions} from "@/lib/utils";
+import {EmployeeReadDto} from "@/services/users/dto/Response/EmployeeReadDto";
+import {UpdateEmployeeDto} from "@/services/users/dto/Request/UpdateEmployeeDto";
 
 
 const schema = z.object({
@@ -32,11 +31,17 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 
-export default function StaffFormDialog({updateTable, accessLevels}: {
+export default function StaffFormDialog({
+                                            dto,
+                                            authenticatedUser,
+                                            updateTable,
+                                            accessLevels
+                                        }: {
+    dto?: EmployeeReadDto,
+    authenticatedUser: number,
     updateTable: () => Promise<void>,
     accessLevels: ReadAccessLevelDto[]
 }) {
-    const authUser = useSelector((state: RootState) => state.auth.authenticatedUser);
     const [open, setOpen] = useState(false);
 
 
@@ -46,6 +51,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
         setError,
         reset,
         setValue,
+        getValues,
         formState: {errors, isSubmitting},
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
@@ -53,12 +59,23 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
             role: UserTypes.Employee
         }
     });
-    const {createEmployee} = useUsersService()
-    const onSubmit: SubmitHandler<FormFields> = async (data) => {
+
+    useEffect(() => {
+        if (dto) {
+            setValue("email", dto.email ?? "")
+            setValue("firstName", dto?.employeeInfo?.firstName ?? "")
+            setValue("lastName", dto?.employeeInfo?.lastName ?? "")
+            setValue("otherName", dto?.employeeInfo?.otherName ?? "")
+            setValue("accessLevelId", dto?.accessLevelId?.toString() ?? "")
+        }
+    }, [dto]);
+
+    const {createEmployee, updatedEmployee} = useUsersService()
 
 
-        const dto: CreateEmployeeDto = {...data, userType: data.role, createdBy: authUser!.id}
-        await createEmployee(dto)
+    const onCreateEmployee = async (data: CreateEmployeeDto) => {
+
+        await createEmployee(data)
             .then((response) => {
                 if (response.success) {
                     toast.success("Employee successfully created!")
@@ -76,12 +93,42 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
                     "Failed To Create Staff",
                 )
             })
-    };
-
-
-    if (!userMeetsRequiredPermissions(authUser, ["manage_users"])) {
-        return null
     }
+
+    const onUpdateEmployee = async (data: UpdateEmployeeDto) => {
+
+        await updatedEmployee(data)
+            .then((response) => {
+                if (response.success) {
+                    toast.success("Staff successfully updated!")
+                    updateTable()
+                    setOpen(false)
+                } else {
+                    toast.error("Error updating Employee")
+                }
+            })
+            .catch(errors => {
+                handleFormApiErrors<FormFields>(errors,
+                    setError,
+                    Object.keys(schema.shape),
+                    "Failed To Update Staff",
+                )
+            })
+    }
+
+    const onSubmit: SubmitHandler<FormFields> = async (data) => {
+
+        if (dto) {
+            await onUpdateEmployee(
+                {...data, userType: data.role, updatedBy: authenticatedUser}
+            )
+            return
+        } else {
+            await onCreateEmployee(
+                {...data, userType: data.role, createdBy: authenticatedUser}
+            )
+        }
+    };
 
 
     return (
@@ -91,28 +138,42 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
             <DialogTrigger asChild>
                 <div>
 
-                    <AppButton
-                        className={"md:px-6 md:text-[1.2rem]"}
-                    >
-                        <UserRoundPlus/>
-                        Add Staff
-                    </AppButton>
+
+                    {
+                        dto ?
+                            <FilePenLine
+                                size={20}
+                                className={" h-4 w-4 text-gray-text-caption cursor-pointer "}
+                            />
+                            : <AppButton
+                                className={"md:px-6 text-[.8rem] "}
+                            >
+                                <UserRoundPlus
+                                    size={16}
+                                />
+                                Add Staff
+                            </AppButton>
+                    }
                 </div>
             </DialogTrigger>
 
             <DialogContent className="w-[95%]  sm:max-w-[450px]">
-                <DialogTitle>
-                    <h1
-                        className={"text-[1.1rem] text-gray-text font-[700]"}
-                    >
-                        Add Staff
-                    </h1>
-                </DialogTitle>
+
+                <DialogHeader>
+                    <DialogTitle>
+                        <h1
+                            className={"text-[1.1rem] text-gray-text font-[700]"}
+                        >
+                            Add Staff
+                        </h1>
+                    </DialogTitle>
+                </DialogHeader>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="w-full flex flex-col gap-[1rem] items-center justify-center"
                 >
                     <FormTextInput<FormFields>
+                        disabled={!!dto}
                         label="Email"
                         required={true}
                         placeholder="Enter Staff Email"
@@ -150,6 +211,7 @@ export default function StaffFormDialog({updateTable, accessLevels}: {
 
                     <FormSelectInput<FormFields>
                         required={true}
+                        defaultValue={getValues("accessLevelId")}
                         label="Access Level"
                         placeholder="Select Staff Access Level"
                         register={register}

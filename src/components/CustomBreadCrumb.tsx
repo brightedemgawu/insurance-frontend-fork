@@ -6,12 +6,15 @@ import Link from "next/link";
 import {ChevronRight} from "lucide-react";
 import {capitalizeFirstLetter, cn} from "@/lib/utils";
 
-export default function CustomBreadCrumb({basePath}: { basePath?: string }) {
+export default function CustomBreadCrumb({basePath}: {
+    basePath?: string,
+}) {
     const pathname = usePathname();
 
     // Combine basePath and pathname efficiently
     const fullPath = basePath ? pathname.startsWith(basePath) ? pathname.slice(basePath.length) : pathname : pathname;
 
+    
     // Split and filter path segments for clarity
     const pathSegments = fullPath.split("/").filter(Boolean);
 

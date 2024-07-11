@@ -1,4 +1,4 @@
-import {cn, formatUserName} from "@/lib/utils";
+import {cn, formatUserEmail, formatUserName} from "@/lib/utils";
 import UserAvatar from "@/components/Auth/UserAvatar";
 
 type UserAvatarWithDetailsProps = {
@@ -28,7 +28,7 @@ export default function UserAvatarWithDetails({
 
             <div>
                 <p className={cn("text-[1rem] font-medium text-gray-text ", nameClassName)}>{formatUserName(user?.name)}</p>
-                <p className={cn("text-[11px] text-gray-text font-normal", emailClassName)}>{user?.email}</p>
+                <p className={cn("text-[11px] text-gray-text font-normal", emailClassName)}>{formatUserEmail(user?.email)}</p>
             </div>
         </div>
     )

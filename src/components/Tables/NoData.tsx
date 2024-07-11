@@ -4,7 +4,7 @@ import {noDataIllustration} from "../../../public";
 export default function NoData() {
     return (
         <div
-            className={"w-full h-[30vh] flex flex-col items-center justify-center"}
+            className={"w-full h-[50vh] flex flex-col items-center justify-center"}
         >
             <Image
                 src={noDataIllustration}

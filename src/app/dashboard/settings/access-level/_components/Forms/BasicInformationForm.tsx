@@ -1,11 +1,18 @@
 "use client"
+
+import {CreateAccessLevelDto} from "@/services/access-levels/dtos/request/CreateAccessLevelDto";
 import {z} from "zod";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import FormTextInput from "@/components/Form/Inputs/FormTextInput/FormTextInput";
-import ActionButton from "@/components/Button/ActionButton";
 import FormTextAreaInput from "@/components/Form/Inputs/FormTextInput/FormTextAreaInput";
-import {CreateAccessLevelDto} from "@/services/access-levels/dtos/request/CreateAccessLevelDto";
+import ActionButton from "@/components/Button/ActionButton";
+import {useEffect} from "react";
+
+interface BasicInformationFormProps {
+    dto: CreateAccessLevelDto,
+    onNextTab: (value: CreateAccessLevelDto) => void
+}
 
 const schema = z.object({
     name: z.string({message: "name is required"}).min(4, {message: 'Length should be greater than 4 characters'}),
@@ -13,23 +20,32 @@ const schema = z.object({
 });
 
 type FormFields = z.infer<typeof schema>;
-export default function BasicInfoForm({dto, onChangeTap}: {
-    dto: CreateAccessLevelDto,
-    onChangeTap: (value: CreateAccessLevelDto) => void
-}) {
+
+const BasicInformationForm = ({dto, onNextTab}: BasicInformationFormProps) => {
+
     const {
         register,
         handleSubmit,
+        setValue,
         setError,
         formState: {errors, isSubmitting},
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         defaultValues: {...dto}
     });
+
+    useEffect(() => {
+        if (dto) {
+            setValue("name", dto?.name ?? "")
+            setValue("description", dto?.description ?? "")
+        }
+    }, [dto]);
+
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         dto = {...dto, ...data}
-        onChangeTap(dto);
+        onNextTab(dto);
     };
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -67,3 +83,5 @@ export default function BasicInfoForm({dto, onChangeTap}: {
         </form>
     )
 }
+
+export default BasicInformationForm;

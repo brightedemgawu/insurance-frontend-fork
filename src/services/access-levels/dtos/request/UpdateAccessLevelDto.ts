@@ -1,9 +1,10 @@
 import {AccessLevelPermissions} from "@/types/authentication/access-level-permissions";
 
-export interface CreateAccessLevelDto {
-    name?: string,
+export interface UpdateAccessLevelDto {
+    id: number,
+    name: string,
     description?: string,
-    createdBy?: number,
+    updatedBy: number,
     permissions?: AccessLevelPermissions,
     assignedUsers?: string[]
 }

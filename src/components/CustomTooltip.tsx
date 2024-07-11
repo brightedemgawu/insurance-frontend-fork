@@ -17,7 +17,7 @@ export default function CustomTooltip({className, children, tipContent}: {
                     side={"right"}
                     className={
                         cn(
-                            "bg-gray-black text-gray-white",
+                            "max-w-[300px] leading-4 tracking-wider  bg-gray-black text-gray-white",
                             className
                         )
                     }

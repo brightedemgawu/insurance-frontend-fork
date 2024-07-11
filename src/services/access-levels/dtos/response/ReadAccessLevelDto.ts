@@ -1,4 +1,4 @@
-import {AccessLevelPermissions} from "@/types/authentication";
+import {AccessLevelPermissions} from "@/types/authentication/access-level-permissions";
 
 export interface ReadAccessLevelDto {
     id: number;

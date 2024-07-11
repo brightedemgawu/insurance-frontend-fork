@@ -1,5 +1,10 @@
-import {LayoutDashboard, LucideIcon, Settings, Users} from "lucide-react";
-import {AccessLevelPermissions} from "@/types/authentication/access-level-permissions";
+import {House, LucideIcon, Settings, Users} from "lucide-react";
+import {
+    AccessLevelPermissions,
+    VIEW_ACCESS_LEVELS_PERMISSION,
+    VIEW_SETTINGS_PERMISSION,
+    VIEW_STAFFS_PERMISSION
+} from "@/types/authentication/access-level-permissions";
 
 export type DashboardSideBarLinkItemType = {
     name: string,
@@ -13,14 +18,13 @@ export const dashboardSideBarLinkMainItems: DashboardSideBarLinkItemType[] = [
     {
         name: "Home",
         link: "/dashboard",
-        icon: LayoutDashboard,
-        permissions: ["view_dashboard"]
+        icon: House,
     },
     {
         name: "Staffs",
         link: "/dashboard/staffs",
         icon: Users,
-        permissions: ["view_users"]
+        permissions: [VIEW_STAFFS_PERMISSION]
     },
 ]
 
@@ -29,7 +33,7 @@ export const dashboardSideBarLinkSettingItems: DashboardSideBarLinkItemType[] = 
         name: "Settings",
         link: "/dashboard/settings/access-level",
         icon: Settings,
-        permissions: ["view_settings"]
+        permissions: [VIEW_SETTINGS_PERMISSION]
     },
 ]
 
@@ -44,6 +48,6 @@ export const SettingsLayoutLinks: SettingsLayoutLink[] = [
     {
         name: "Access Level",
         link: "/dashboard/settings/access-level",
-        permissions: ["view_access_levels"]
+        permissions: [VIEW_ACCESS_LEVELS_PERMISSION]
     },
 ]

@@ -1,33 +1,39 @@
+export const MANAGE_ACCESS_LEVELS_PERMISSION = "manage_access_levels"
+export const VIEW_ACCESS_LEVELS_PERMISSION = "view_access_levels"
+export const VIEW_SETTINGS_PERMISSION = "view_settings"
 export const DashboardSettingsPermissions: string[] = [
-    "view_settings",
-    "view_access_levels",
-    "manage_access_levels"
+    VIEW_SETTINGS_PERMISSION,
+    VIEW_ACCESS_LEVELS_PERMISSION,
+    MANAGE_ACCESS_LEVELS_PERMISSION
 ] as const;
 
 
+export const VIEW_STAFFS_PERMISSION = "view_staffs"
+export const MANAGE_STAFFS_PERMISSION = "manage_staffs"
 export const StaffPermissions: string[] = [
-    "view_users",
-    "manage_users"
+    VIEW_STAFFS_PERMISSION,
+    MANAGE_STAFFS_PERMISSION,
 ] as const;
 
-const OtherPermissions: string[] = [
-    "view_dashboard"
-]
-
-const combinedPermissions = [
-    ...DashboardSettingsPermissions,
-    ...StaffPermissions,
-    ...OtherPermissions,
-] as const;
 
 export type AccessLevelPermissions = {
-    view_settings: boolean,
-    view_access_levels: boolean,
-    manage_access_levels: boolean
+    [VIEW_SETTINGS_PERMISSION]: boolean,
+    [VIEW_ACCESS_LEVELS_PERMISSION]: boolean,
+    [MANAGE_ACCESS_LEVELS_PERMISSION]: boolean
 
-    view_users: boolean,
-    manage_users: boolean,
+    [VIEW_STAFFS_PERMISSION]: boolean,
+    [MANAGE_STAFFS_PERMISSION]: boolean,
 
 
-    view_dashboard: boolean
+};
+
+// Utility function to initialize permissions with all false values
+export const initializePermissions = (): AccessLevelPermissions => {
+    return {
+        view_settings: false,
+        view_access_levels: false,
+        manage_access_levels: false,
+        view_staffs: false,
+        manage_staffs: false,
+    };
 };

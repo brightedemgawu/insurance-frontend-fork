@@ -2,16 +2,18 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {flexRender, Table as TanstackTable} from "@tanstack/react-table";
 import {ColumnDef} from "@tanstack/table-core";
 import NoData from "@/components/Tables/NoData";
+import {cn} from "@/lib/utils";
 
 // Define the props interface for CustomTable
 interface CustomTableProps<TData> {
     table: TanstackTable<TData>;
     columns: ColumnDef<TData>[];
+    className?: string
 }
 
-export default function CustomTable<TData>({table, columns}: CustomTableProps<TData>) {
+export default function CustomTable<TData>({table, columns, className}: CustomTableProps<TData>) {
     return (
-        <div className="w-full min-h-[50vh]  rounded-md border-[1px] border-gray-50 ">
+        <div className={cn("w-full min-h-[50vh]  rounded-md border-[1px] border-gray-50 ", className)}>
             <Table
                 className={"min-w-[600px]  overflow-y-scroll "}
             >
@@ -54,7 +56,7 @@ export default function CustomTable<TData>({table, columns}: CustomTableProps<TD
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={columns.length} className="h-24 text-center">
+                            <TableCell colSpan={columns.length} className="text-center">
                                 <NoData/>
                             </TableCell>
                         </TableRow>

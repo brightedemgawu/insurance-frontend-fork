@@ -15,12 +15,13 @@ export default function AccessLevelTableFilter<TData>({table}: AccessLevelTableF
                 className={"w-full md:w-[400px]"}
             >
                 <AppTextInput
-                    placeholder="Filter by name..."
+                    placeholder="Search by name..."
                     name={"Search"}
                     Icon={Search}
                     onChange={async (value) => {
                         table.getColumn("name")?.setFilterValue(value)
-                    }}/>
+                    }}
+                />
             </div>
 
         </div>

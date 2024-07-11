@@ -1,32 +1,34 @@
-"use client"
-
 import {CreateAccessLevelDto} from "@/services/access-levels/dtos/request/CreateAccessLevelDto";
-import {cn, convertToTitleCase} from "@/lib/utils";
 import {useState} from "react";
-import {Switch} from "@/components/ui/switch";
-import ActionButton from "@/components/Button/ActionButton";
 import {Separator} from "@/components/ui/separator";
+import ActionButton from "@/components/Button/ActionButton";
 import {
     AccessLevelPermissions,
     DashboardSettingsPermissions,
     StaffPermissions
 } from "@/types/authentication/access-level-permissions";
+import {cn, convertToTitleCase} from "@/lib/utils";
+import {Switch} from "@/components/ui/switch";
 
-
-const PermissionTabs: string[] = ["Settings", "Employees"]
-
-
-export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
+interface SelectAccessLevelPermissionsProps {
     dto: CreateAccessLevelDto,
-    onSubmitData: (value: CreateAccessLevelDto) => Promise<void>,
-    goBack: () => void
-}) {
+    onNextTab: (value: CreateAccessLevelDto) => void,
+    onPreviousTab: (value: CreateAccessLevelDto) => void
+}
 
-    const [tab, setTap] = useState<number>(0);
 
-    const [permissions, setPermissions] = useState({
-        ...dto.permissions,
-        "view_dashboard": true
+const PermissionTabs: string[] = ["Settings", "Staffs"]
+
+const SelectAccessLevelPermissions = ({
+                                          dto,
+                                          onNextTab,
+                                          onPreviousTab
+                                      }: SelectAccessLevelPermissionsProps) => {
+
+    const [currentTab, setCurrentTap] = useState<number>(0);
+
+    const [permissions, setPermissions] = useState<AccessLevelPermissions>({
+        ...dto.permissions!,
     })
 
 
@@ -35,7 +37,7 @@ export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
      * @returns JSX elements representing permissions for the selected tab.
      */
     const renderTabPermissions = () => {
-        const selectedPermissions = tab === 0 ? DashboardSettingsPermissions : StaffPermissions;
+        const selectedPermissions = currentTab === 0 ? DashboardSettingsPermissions : StaffPermissions;
 
         return selectedPermissions.map((permission: string, index) => (
             <div
@@ -55,6 +57,7 @@ export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
             </div>
         ));
     };
+
     return (
         <div
             className={"w-full"}
@@ -70,13 +73,13 @@ export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
                     PermissionTabs.map((link, index) => {
                         return (
                             <button
-                                onClick={() => setTap(index)}
+                                onClick={() => setCurrentTap(index)}
                                 className={
                                     cn(
                                         ["min-w-fit text-gray-text tracking-wider text-[.9rem] bg-gray-200/50 px-6",
                                             "hover:text-primary-text flex items-center h-[40px] "],
                                         {
-                                            "text-primary-text bg-gray-white border-b-[2px] font-medium border-primary-border": tab === index,
+                                            "text-primary-text bg-gray-white border-b-[2px] font-medium border-primary-border": currentTab === index,
                                         }
                                     )
                                 }
@@ -90,13 +93,11 @@ export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
 
             </div>
 
-            <div
-                className={"w-full mt-6"}
-            >
 
-                <div className={"w-full"}>
-                    {renderTabPermissions()}
-                </div>
+            <div
+                className={"w-full min-h-[250px] mt-6"}
+            >
+                {renderTabPermissions()}
             </div>
 
             <div
@@ -104,22 +105,25 @@ export default function ChoosePermissionsForm({goBack, dto, onSubmitData}: {
             >
                 <ActionButton
                     onClick={() => {
-                        goBack()
+                        dto.permissions = permissions
+                        onPreviousTab(dto)
                     }}
                     className={"py-2"}
                     type={"button"}>
                     PREVIOUS
                 </ActionButton>
                 <ActionButton
-                    onClick={async () => {
+                    onClick={() => {
                         dto.permissions = permissions
-                        await onSubmitData(dto)
+                        onNextTab(dto)
                     }}
                     className={"py-2"}
                     type={"button"}>
-                    SUBMIT
+                    CONTINUE
                 </ActionButton>
             </div>
         </div>
     )
 }
+
+export default SelectAccessLevelPermissions;
