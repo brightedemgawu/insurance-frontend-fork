@@ -15,7 +15,7 @@ interface ProfileFormProps {
 
 
 const GENDER_VALUES = ["Male", "Female", "Other"];
-const MARITAL_STATUS_VALUES = ["Single", "Married", "Divorced"]
+const MARITAL_STATUS_VALUES = ["Single", "Married", "Divorced", "Widowed"]
 
 const ProfileForm = ({authenticatedUserDetails, editingProfile = true}: ProfileFormProps) => {
 
@@ -180,7 +180,7 @@ const ProfileForm = ({authenticatedUserDetails, editingProfile = true}: ProfileF
                         </ActionButton>
                     </div>
                 }
-                
+
             </form>
 
         </div>
