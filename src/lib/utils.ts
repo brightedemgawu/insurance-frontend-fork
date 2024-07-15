@@ -46,6 +46,9 @@ export function decodeToken(token: SuccessfulLoginDto): AuthenticatedUser {
         name: decodedToken.name,
         email: decodedToken.email,
         userType: decodedToken.userType,
+        photo: decodedToken.photo,
+        position: decodedToken.position,
+        onboarding: decodedToken.onboarding,
         accessLevel: decodedToken.accessLevel,
     } as AuthenticatedUser
 

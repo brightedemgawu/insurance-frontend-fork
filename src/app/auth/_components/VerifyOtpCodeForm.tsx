@@ -10,11 +10,13 @@ import ActionButton from "@/components/Button/ActionButton";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
 import {buttonStyleVariants} from "@/components/Button/buttonStyleVariants";
-import {useSignInUser} from "@/hooks/auth/useSignInUser";
 import useAuthenticationService from "@/services/authentication/useAuthenticationService";
 import {VerifyOtpCodeDto} from "@/services/authentication/dtos/request/VerifyOtpCodeDto";
 import {handleFormApiErrors} from "@/lib/handleApiErrors";
 import {SendOtpCodeDto} from "@/services/authentication/dtos/request/SendOtpCodeDto";
+import {useRouter} from "next/navigation";
+import {useDispatch} from "react-redux";
+import {setMfa} from "@/store/features/auth/authSlice";
 
 const schema = z.object({
     otpNumber: z.string({message: "Otp Number is required"}).min(6, {message: 'Otp Number is required'}),
@@ -23,7 +25,8 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 export default function VerifyOtpCodeForm({email}: { email: string }) {
-
+    const router = useRouter()
+    const dispatch = useDispatch();
     const [_value, setInternalValue] = useState("")
     const {
         handleSubmit,
@@ -36,7 +39,6 @@ export default function VerifyOtpCodeForm({email}: { email: string }) {
     });
     const {sendOtpCode, verifyOtpCode} = useAuthenticationService();
 
-    const {signInUser} = useSignInUser()
 
     const onResendOtpCode = async () => {
 
@@ -64,7 +66,9 @@ export default function VerifyOtpCodeForm({email}: { email: string }) {
         await verifyOtpCode(dto)
             .then((response) => {
                 if (response.success) {
-                    signInUser(response.data!, "/", true)
+                    toast.success("Otp verification successful")
+                    dispatch(setMfa(response.data!))
+                    router.push(`/auth/verify-mfa/${decodeURIComponent(email)}`);
                 } else {
                     toast.error("Login Error", {description: "An unexpected error occurred. Please try again."});
                 }

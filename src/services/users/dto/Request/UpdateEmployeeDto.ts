@@ -3,13 +3,12 @@ export interface UpdateEmployeeDto {
     firstName: string;
     lastName: string;
     otherName?: string;
-    dateOfBirth?: string;
+    dateOfBirth?: Date;
     gender?: string;
     maritalStatus?: string;
     nationality?: string;
     phone?: string;
-    photo?: string;
-    userType: string;
-    updatedBy: number;
-    accessLevelId: string;
+    address?: string;
+    positionId?: string,
+    accessLevelId?: string;
 }

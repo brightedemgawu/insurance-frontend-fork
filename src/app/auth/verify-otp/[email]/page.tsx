@@ -21,7 +21,7 @@ export default function Page({params}: { params: { email: string } }) {
                 <p className="font-medium text-sm text-gray-text-caption">
                     You have a
                     <span className="mx-[4px] font-bold text-gray-text ">
-                    10 minutes
+                    5 minutes
                     </span>
                     window to utilize this code before it becomes invalid.
                 </p>

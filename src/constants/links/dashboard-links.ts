@@ -1,8 +1,9 @@
-import {House, LucideIcon, Settings, Users} from "lucide-react";
+import {House, LucideIcon, Settings, UserRound, Users} from "lucide-react";
 import {
     AccessLevelPermissions,
     VIEW_ACCESS_LEVELS_PERMISSION,
     VIEW_SETTINGS_PERMISSION,
+    VIEW_STAFF_POSITIONS_PERMISSION,
     VIEW_STAFFS_PERMISSION
 } from "@/types/authentication/access-level-permissions";
 
@@ -31,9 +32,14 @@ export const dashboardSideBarLinkMainItems: DashboardSideBarLinkItemType[] = [
 export const dashboardSideBarLinkSettingItems: DashboardSideBarLinkItemType[] = [
     {
         name: "Settings",
-        link: "/dashboard/settings/access-level",
+        link: "/dashboard/settings",
         icon: Settings,
         permissions: [VIEW_SETTINGS_PERMISSION]
+    },
+    {
+        name: "Profile",
+        link: "/dashboard/profile",
+        icon: UserRound 
     },
 ]
 
@@ -49,5 +55,10 @@ export const SettingsLayoutLinks: SettingsLayoutLink[] = [
         name: "Access Level",
         link: "/dashboard/settings/access-level",
         permissions: [VIEW_ACCESS_LEVELS_PERMISSION]
+    },
+    {
+        name: "Staff Positions",
+        link: "/dashboard/settings/staff-positions",
+        permissions: [VIEW_STAFF_POSITIONS_PERMISSION]
     },
 ]

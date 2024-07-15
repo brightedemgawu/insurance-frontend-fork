@@ -5,5 +5,5 @@ import noDataIllustration from "./illustrations/no-data.svg"
 export {
     appLogo,
     underConstruction,
-    noDataIllustration
+    noDataIllustration,
 }

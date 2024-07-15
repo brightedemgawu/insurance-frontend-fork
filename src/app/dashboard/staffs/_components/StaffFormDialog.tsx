@@ -17,6 +17,7 @@ import FormSelectInput from "@/components/Form/Inputs/FormTextInput/FormSelectIn
 import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
 import {EmployeeReadDto} from "@/services/users/dto/Response/EmployeeReadDto";
 import {UpdateEmployeeDto} from "@/services/users/dto/Request/UpdateEmployeeDto";
+import {StaffPositionsReadDto} from "@/services/staff-positions/dto/response/StaffPositionsReadDto";
 
 
 const schema = z.object({
@@ -25,6 +26,7 @@ const schema = z.object({
     lastName: z.string({message: "name is required"}).min(3, {message: 'Length should be greater than 3 characters'}),
     otherName: z.string(),
     accessLevelId: z.string({message: 'Access level is required'}).min(1, {message: "Access level is required"}),
+    positionId: z.string({message: 'Staff Position is required'}).min(1, {message: "Staff Position is required"}),
     role: z.string({message: "role is required"})
 });
 
@@ -33,11 +35,13 @@ type FormFields = z.infer<typeof schema>;
 
 export default function StaffFormDialog({
                                             dto,
+                                            staffPositions,
                                             authenticatedUser,
                                             updateTable,
                                             accessLevels
                                         }: {
     dto?: EmployeeReadDto,
+    staffPositions: StaffPositionsReadDto[],
     authenticatedUser: number,
     updateTable: () => Promise<void>,
     accessLevels: ReadAccessLevelDto[]
@@ -67,6 +71,7 @@ export default function StaffFormDialog({
             setValue("lastName", dto?.employeeInfo?.lastName ?? "")
             setValue("otherName", dto?.employeeInfo?.otherName ?? "")
             setValue("accessLevelId", dto?.accessLevelId?.toString() ?? "")
+            setValue("positionId", dto?.positionId?.toString() ?? "")
         }
     }, [dto]);
 
@@ -78,12 +83,12 @@ export default function StaffFormDialog({
         await createEmployee(data)
             .then((response) => {
                 if (response.success) {
-                    toast.success("Employee successfully created!")
+                    toast.success("Staff successfully created!")
                     reset()
                     updateTable()
                     setOpen(false)
                 } else {
-                    toast.error("Error creating Employee")
+                    toast.error("Error creating Staff")
                 }
             })
             .catch(errors => {
@@ -104,7 +109,7 @@ export default function StaffFormDialog({
                     updateTable()
                     setOpen(false)
                 } else {
-                    toast.error("Error updating Employee")
+                    toast.error("Error updating staff")
                 }
             })
             .catch(errors => {
@@ -120,7 +125,7 @@ export default function StaffFormDialog({
 
         if (dto) {
             await onUpdateEmployee(
-                {...data, userType: data.role, updatedBy: authenticatedUser}
+                {...data}
             )
             return
         } else {
@@ -222,7 +227,19 @@ export default function StaffFormDialog({
                         name="accessLevelId"
                         errors={errors}
                     />
-
+                    <FormSelectInput<FormFields>
+                        required={true}
+                        defaultValue={getValues("positionId")}
+                        label="Staff Position"
+                        placeholder="Select Staff Position"
+                        register={register}
+                        onValueChange={(value) => {
+                            setValue("positionId", value)
+                        }}
+                        values={staffPositions?.map((item) => ({name: item.name, value: item.id.toString()}))}
+                        name="positionId"
+                        errors={errors}
+                    />
 
                     <div
                         className={"w-full flex justify-start items-center gap-2"}

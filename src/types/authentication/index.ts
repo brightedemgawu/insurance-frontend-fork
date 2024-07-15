@@ -4,6 +4,9 @@ export type AuthenticatedUser = {
     id: number;
     name: string;
     email: string;
+    photo: string | null;
+    position: string;
+    onboarding: boolean;
     imageUrl?: string;
     userType: UserTypes;
     accessLevel: AccessLevel
@@ -27,5 +30,8 @@ export type DecodedRefreshToken = {
     name: string;
     email: string;
     userType: UserTypes;
-    accessLevel: AccessLevel
+    accessLevel: AccessLevel;
+    photo: string | null;
+    position: string;
+    onboarding: boolean;
 }

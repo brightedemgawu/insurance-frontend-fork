@@ -8,7 +8,6 @@ export interface EmployeeReadInfoDto {
     maritalStatus: string | null;
     nationality: string | null;
     phone: string | null;
-    photo: string | null;
     address: string | null;
     email: string;
 }

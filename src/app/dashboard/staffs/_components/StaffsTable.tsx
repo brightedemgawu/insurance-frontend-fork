@@ -25,18 +25,23 @@ import useAccessLevelService from "@/services/access-levels/useAccessLevelServic
 import {ReadAccessLevelDto} from "@/services/access-levels/dtos/response/ReadAccessLevelDto";
 import SortableTableHeader from "@/components/Tables/SortableTableHeader";
 import CustomTooltip from "@/components/CustomTooltip";
-import {ArchiveX} from "lucide-react";
+import {ArchiveRestore, ArchiveX} from "lucide-react";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import {MANAGE_STAFFS_PERMISSION} from "@/types/authentication/access-level-permissions";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/store";
+import {toast} from "sonner";
+import useStaffPositionsService from "@/services/staff-positions/useStaffPositionsService";
+import {StaffPositionsReadDto} from "@/services/staff-positions/dto/response/StaffPositionsReadDto";
 
 const LIMIT = 5
 
 export default function StaffsTable() {
-    const {getEmployees} = useUsersService()
+    const {getEmployees, changeUserStatus} = useUsersService()
     const {getAccessLevels} = useAccessLevelService()
+    const {getStaffPositions} = useStaffPositionsService()
 
+    const [staffPositions, setStaffPositions] = useState<StaffPositionsReadDto[]>([])
     const [accessLevels, setAccessLevels] = useState<ReadAccessLevelDto[]>([])
     const [sorting, setSorting] = useState<SortingState>([])
 
@@ -90,7 +95,7 @@ export default function StaffsTable() {
                     className={"w-[150px] text-[.9rem] "}
                 >
                     {
-                        staff && staff.employeeInfo && staff.employeeInfo.phone ? `+${staff.employeeInfo.phone}` : "NaN"
+                        staff && staff.employeeInfo && staff.employeeInfo.phone ? `${staff.employeeInfo.phone}` : "NaN"
                     }
                 </p>
 
@@ -166,6 +171,7 @@ export default function StaffsTable() {
                         <CustomTooltip tipContent={"Edit"}>
                             <StaffFormDialog
                                 dto={data}
+                                staffPositions={staffPositions}
                                 authenticatedUser={authenticatedUser!.id}
                                 accessLevels={accessLevels} updateTable={fetchEmployees}/>
                         </CustomTooltip>
@@ -173,20 +179,27 @@ export default function StaffsTable() {
                         <ConfirmationDialog
                             heading={"Archive Staff"}
                             trigger={
-                                <CustomTooltip tipContent={"Archive"}>
-                                    <ArchiveX
-                                        size={20}
-                                        className={" h-4 w-4 text-error-text cursor-pointer "}
-                                    />
-                                </CustomTooltip>
+                                data.active ?
+                                    <CustomTooltip tipContent={"Archive"}>
+                                        <ArchiveX
+                                            size={20}
+                                            className={" h-4 w-4 text-error-text cursor-pointer "}
+                                        />
+                                    </CustomTooltip>
+                                    : <CustomTooltip tipContent={"Unarchived"}>
+                                        <ArchiveRestore
+                                            size={20}
+                                            className={" h-4 w-4 text-success-500 cursor-pointer "}
+                                        />
+                                    </CustomTooltip>
                             }
                             OnAction={async () => {
-
+                                await onChangeUserStatus(data.email);
                             }}>
                             <p
                                 className={"text-[.9rem]"}
                             >
-                                Are you sure you want to archive {""}
+                                Are you sure you want to {" "} {data.active ? "archive" : "unarchived"} {""}
                                 <span
                                     className={"font-bold"}
                                 >
@@ -236,6 +249,21 @@ export default function StaffsTable() {
             })
     }
 
+    const onChangeUserStatus = async (email: string) => {
+        await changeUserStatus(email)
+            .then((response) => {
+                if (response.success) {
+                    toast.success("Staff status changed successfully!")
+                    fetchEmployees()
+                } else {
+                    toast.error("Error changing staff status.")
+                }
+            })
+            .catch(errors => {
+                handleApiErrors(errors)
+            })
+    }
+
     useEffect(() => {
         fetchEmployees().then()
     }, [])
@@ -251,9 +279,24 @@ export default function StaffsTable() {
                 })
 
         }
+        const fetchStaffPositions = async () => {
+            await getStaffPositions()
+                .then((data) => {
+                    setStaffPositions(data.data!)
+                })
+                .catch(errors => {
+                    handleApiErrors(errors)
+                })
+
+        }
         fetchAccessLevels().then()
+        fetchStaffPositions().then()
     }, [])
 
+    if (!authenticatedUser){
+        return 
+    }
+    
     return (
         <div
             className={"w-full md:p-6"}
@@ -274,6 +317,7 @@ export default function StaffsTable() {
 
                 {canAuthenticatedUserManageStaff &&
                     <StaffFormDialog
+                        staffPositions={staffPositions}
                         authenticatedUser={authenticatedUser!.id}
                         accessLevels={accessLevels} updateTable={fetchEmployees}/>
                 }

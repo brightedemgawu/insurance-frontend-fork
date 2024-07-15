@@ -30,6 +30,9 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                         email: decodedToken.email,
                         userType: decodedToken.userType,
                         accessLevel: decodedToken.accessLevel,
+                        photo: decodedToken.photo,
+                        position: decodedToken.position,
+                        onboarding: decodedToken.onboarding,
                         token: token
                     } as User;
 
@@ -52,6 +55,9 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                 token.name = authenticatedUser?.name;
                 token.email = authenticatedUser?.email;
                 token.userType = authenticatedUser?.userType;
+                token.photo = authenticatedUser?.photo;
+                token.position = authenticatedUser?.position;
+                token.onboarding = authenticatedUser?.onboarding;
                 token.accessLevel = authenticatedUser?.accessLevel;
             }
             return token;

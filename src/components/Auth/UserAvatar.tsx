@@ -2,7 +2,7 @@ import {cn} from "@/lib/utils";
 import Image from "next/image";
 
 type UserAvatarProps = {
-    user: { email: string, imageUrl?: string },
+    user: { email: string, photo?: string | null },
     containerClassName?: string;
     className?: string,
     disableBeep?: boolean
@@ -12,12 +12,12 @@ export default function UserAvatar({user, className, containerClassName, disable
     return (
         <div className={cn("relative inline-block", containerClassName)}>
 
-            {user.imageUrl && user.imageUrl !== "" ? (
+            {user.photo && user.photo !== "" ? (
                     <Image
                         width="200"
                         height="200"
                         className={cn("inline-block size-[45px] rounded-full", className)}
-                        src={user.imageUrl}
+                        src={user.photo}
                         alt="Image Description"/>)
                 : (<
                     div

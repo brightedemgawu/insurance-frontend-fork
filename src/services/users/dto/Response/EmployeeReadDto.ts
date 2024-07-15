@@ -6,6 +6,8 @@ export interface EmployeeReadDto {
     email: string;
     createdAt: string;
     active: boolean;
+    positionId: string,
+    photo: string | null;
     createdBy: number;
     updatedAt: string | null;
     updatedBy: number | null;
