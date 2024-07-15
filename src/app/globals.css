@@ -3,6 +3,205 @@
 @tailwind utilities;
 
 
-@layer utilities {
+@layer base {
+    :root {
+        --red-50: 254, 236, 239;
+        --red-100: 253, 216, 224;
+        --red-200: 251, 172, 188;
+        --red-300: 249, 134, 157;
+        --red-400: 247, 95, 125;
+        --red-500: 245, 54, 92;
+        --red-600: 228, 11, 55;
+        --red-700: 170, 8, 41;
+        --red-800: 112, 6, 27;
+        --red-900: 58, 3, 14;
+        --red-950: 29, 1, 7;
+
+        --orange-50: 255, 239, 235;
+        --orange-100: 254, 222, 215;
+        --orange-200: 253, 194, 180;
+        --orange-300: 253, 161, 140;
+        --orange-400: 252, 128, 100;
+        --orange-500: 251, 99, 64;
+        --orange-600: 245, 49, 5;
+        --orange-700: 185, 37, 4;
+        --orange-800: 125, 25, 3;
+        --orange-900: 60, 12, 1;
+        --orange-950: 30, 6, 1;
+
+        --yellow-50: 255, 252, 240;
+        --yellow-100: 255, 249, 224;
+        --yellow-200: 255, 243, 194;
+        --yellow-300: 255, 237, 163;
+        --yellow-400: 255, 232, 138;
+        --yellow-500: 255, 225, 106;
+        --yellow-600: 255, 211, 36;
+        --yellow-700: 214, 171, 0;
+        --yellow-800: 143, 114, 0;
+        --yellow-900: 71, 57, 0;
+        --yellow-950: 36, 29, 0;
+
+        --green-50: 241, 248, 236;
+        --green-100: 224, 240, 213;
+        --green-200: 194, 226, 172;
+        --green-300: 166, 213, 134;
+        --green-400: 135, 198, 93;
+        --green-500: 106, 174, 61;
+        --green-600: 85, 140, 49;
+        --green-700: 65, 106, 37;
+        --green-800: 41, 68, 24;
+        --green-900: 21, 34, 12;
+        --green-950: 12, 19, 7;
+
+        --blue-50: 231, 250, 253;
+        --blue-100: 207, 245, 252;
+        --blue-200: 159, 235, 249;
+        --blue-300: 112, 225, 245;
+        --blue-400: 64, 215, 242;
+        --blue-500: 17, 205, 239;
+        --blue-600: 13, 164, 191;
+        --blue-700: 10, 123, 143;
+        --blue-800: 6, 82, 96;
+        --blue-900: 3, 41, 48;
+        --blue-950: 2, 21, 24;
+
+        --purple-50: 241, 235, 255;
+        --purple-100: 231, 219, 255;
+        --purple-200: 206, 184, 255;
+        --purple-300: 178, 143, 255;
+        --purple-400: 154, 107, 255;
+        --purple-500: 130, 71, 255;
+        --purple-600: 84, 5, 255;
+        --purple-700: 61, 0, 194;
+        --purple-800: 42, 0, 133;
+        --purple-900: 21, 0, 66;
+        --purple-950: 10, 0, 31;
+
+        --pink-50: 252, 237, 249;
+        --pink-100: 249, 220, 243;
+        --pink-200: 243, 181, 229;
+        --pink-300: 237, 146, 217;
+        --pink-400: 231, 111, 205;
+        --pink-500: 225, 73, 192;
+        --pink-600: 206, 34, 169;
+        --pink-700: 153, 25, 126;
+        --pink-800: 101, 17, 82;
+        --pink-900: 53, 9, 43;
+        --pink-950: 26, 4, 22;
+
+        --gray-50: 247, 247, 247;
+        --gray-100: 240, 240, 240;
+        --gray-200: 222, 222, 222;
+        --gray-300: 207, 206, 206;
+        --gray-400: 192, 191, 191;
+        --gray-500: 175, 174, 174;
+        --gray-600: 141, 140, 140;
+        --gray-700: 105, 104, 104;
+        --gray-800: 69, 68, 68;
+        --gray-900: 36, 35, 35;
+        --gray-950: 18, 18, 18;
+
+        --base-white: 255, 255, 255;
+        --base-black: 0, 0, 0;
+    }
+}
+
+@layer base {
+
+    * {
+        @apply font-inter;
+        box-sizing: border-box;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    body {
+        @apply w-full h-[100vh] bg-gray-100 max-w-full overflow-x-hidden;
+    }
+}
+
+
+@layer components {
+    body::-webkit-scrollbar-track, .custom-scrollbar::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        background-color: #F5F5F5;
+    }
+
+    body::-webkit-scrollbar, .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+        background-color: #F5F5F5;
+    }
+
+    body::-webkit-scrollbar-thumb, .custom-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+        background-color: rgba(126, 125, 125, 0.53);
+    }
+
+    .custom-tab-scrollbar::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        background-color: #F5F5F5;
+    }
+
+    .custom-tab-scrollbar::-webkit-scrollbar {
+        height: 5px;
+        background-color: #F5F5F5;
+    }
+
+    .custom-tab-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+        background-color: rgba(159, 159, 159, 0.53);
+    }
+
+
+    .bg-glass-morphic {
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+
+    .bg-hero-card-glass-morphic {
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .bg-lighter-glass-morphic {
+        background: rgba(41, 41, 41, 0.3);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+    }
+
+    .width-transition {
+        @apply transition-width duration-300 ease-in-out;
+    }
+
+    .left-transition {
+        @apply transition-left duration-300 ease-in-out;
+    }
+
+    .transform-transition {
+        @apply transition-transform duration-300 ease-in-out;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for Firefox */
+    .no-scrollbar {
+        scrollbar-width: none; /* Firefox */
+    }
+
 
 }
